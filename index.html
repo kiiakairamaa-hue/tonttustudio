@@ -621,5 +621,40 @@ function showSaveToast(){
 
 </div> <!-- /.wrap -->
 
+<!-- =====================================================
+     📢 TALLENNUSILMOITUS (TOAST)
+     ----------------------------------------------------- -->
+
+<style>
+#save-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.75);
+  color: #fffbe8;
+  padding: 12px 22px;
+  border-radius: 22px;
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+  z-index: 9999;
+}
+</style>
+
+<div id="save-toast">Kuva tallennettu!</div>
+
+<script>
+function showSaveToast() {
+  const t = document.getElementById('save-toast');
+  t.style.opacity = "1";
+  setTimeout(() => {
+    t.style.opacity = "0";
+  }, 1500);
+}
+</script>
+
 </body>
 </html>
