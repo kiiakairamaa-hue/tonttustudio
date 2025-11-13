@@ -113,8 +113,6 @@ canvas{width:100%; height:100%; display:block; background:#000}
 <body>
 <div class="wrap">
 
-<div id="save-toast" style="position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.75); color: #f6d778; padding: 10px 18px; border-radius: 20px; font-weight: 700; font-size: 15px; text-shadow: 0 1px 2px #000; border: 2px solid #7f642a; box-shadow: 0 4px 12px rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transition: opacity .25s ease; z-index: 9999;">Kuva tallennettu!</div>
-
 
 <h1>TonttuStudio</h1>
 
@@ -527,11 +525,7 @@ showSaveToast();
     bg.y = cy - (cy - bg.y) * (next/bg.scale);
     bg.scale=next; needsRedraw=true;
   }, {passive:false});
-function showSaveToast(){
-  const t = document.getElementById('save-toast');
-  t.style.opacity = "1";
-  setTimeout(()=>{ t.style.opacity = "0"; }, 1800);
-}
+
 
 })();
 </script>
@@ -666,3 +660,4 @@ function showSaveToast() {
 
 </body>
 </html>
+
