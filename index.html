@@ -533,26 +533,31 @@ file.addEventListener('change', async (e)=>{
 });
 
 
-  /* -------------------- Tallenna PNG -------------------- */
-  save.addEventListener('click', ()=>{
-    const off=document.createElement('canvas');
-    off.width=canvas.width;
-    off.height=canvas.height;
+/* -------------------- Tallenna PNG -------------------- */
+save.addEventListener('click', ()=>{
+  const off=document.createElement('canvas');
+  off.width=canvas.width;
+  off.height=canvas.height;
 
-    const g=off.getContext('2d',{alpha:false});
-    renderTo(g);
+  const g=off.getContext('2d',{alpha:false});
+  renderTo(g);
 
-    const filename = `TonttuStudio_${Date.now()}.png`;
+  const filename = `TonttuStudio_${Date.now()}.png`;
 
-    off.toBlob((blob)=>{
-      const a=document.createElement('a');
-      a.href=URL.createObjectURL(blob);
-      a.download=filename;
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);
-    },'image/png',0.95);
-  });
+  off.toBlob((blob)=>{
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=filename;
+    a.target = "_blank";  // ← ★ AINOA LISÄYS Android Chromen vuoksi ★
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{
+      URL.revokeObjectURL(a.href);
+      a.remove();
+    },1000);
+  },'image/png',0.95);
+});
+
 
   /* -------------------- Tyhjennä -------------------- */
   clearBtn.addEventListener('click', resetAll);
