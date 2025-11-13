@@ -472,32 +472,66 @@ h1 {
     delBtn.style.top  = (py - previewRect.top  - 6) + 'px';
   }
 
-  /* -------------------- Kuvan avaus -------------------- */
-  file.addEventListener('change', async (e)=>{
-    const f = e.target.files && e.target.files[0];
-    if(!f) return;
+/* -------------------- Kuvan avaus -------------------- */
+file.addEventListener('change', async (e)=>{
+  const f = e.target.files && e.target.files[0];
+  if(!f) return;
 
-    const label = document.querySelector('label[for="file"]');
-    const originalText = label.textContent;
-    label.textContent="LATAAN...";
-    label.style.opacity="0.6";
-    label.style.pointerEvents="none";
+  const label = document.querySelector('label[for="file"]');
+  const originalText = label.textContent;
+  label.textContent="LATAAN...";
+  label.style.opacity="0.6";
+  label.style.pointerEvents="none";
 
-    try{
+  try{
+    const isHeic = (/\.hei[cf]$/i.test(f.name||'') || /heic|heif/i.test(f.type||''));
+
+    if (isHeic && window.heic2any) {
+      // HEIC → PNG muunnos
+      const pngBlob = await window.heic2any({ blob: f, toType: 'image/png' });
+      const url = URL.createObjectURL(pngBlob);
+
+      const img = await new Promise((res, rej) => {
+        const im = new Image();
+        im.onload = () => res(im);
+        im.onerror = rej;
+        im.src = url;
+      });
+
+      URL.revokeObjectURL(url);
+
+      const off = document.createElement('canvas');
+      off.width = img.naturalWidth;
+      off.height = img.naturalHeight;
+
+      const g = off.getContext('2d');
+      g.imageSmoothingEnabled = true;
+      g.imageSmoothingQuality = 'high';
+      g.drawImage(img, 0, 0);
+
+      bgBitmap = downscaleToMaxEdge(off);
+
+    } else {
+      // Normaalit kuvat
       const bmp = await decodeSmart(f);
       bgBitmap = downscaleToMaxEdge(bmp);
-      fitContain();
-      clampBgScale();
-      needsRedraw=true;
-    }catch{
-      alert("Kuvan lataus epäonnistui");
-    }finally{
-      e.target.value='';
-      label.textContent=originalText;
-      label.style.opacity='1';
-      label.style.pointerEvents='auto';
+      if (bmp && bmp.close) try { bmp.close(); } catch(_){}
     }
-  });
+
+    fitContain();
+    clampBgScale();
+    needsRedraw = true;
+
+  }catch{
+    alert("Kuvan lataus epäonnistui");
+  }finally{
+    e.target.value='';
+    label.textContent=originalText;
+    label.style.opacity='1';
+    label.style.pointerEvents='auto';
+  }
+});
+
 
   /* -------------------- Tallenna PNG -------------------- */
   save.addEventListener('click', ()=>{
