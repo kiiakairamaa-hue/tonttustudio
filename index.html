@@ -1,657 +1,293 @@
 <!DOCTYPE html>
-<!-- =========================================================
-     ⚠️ TURVAVERSIO
-     Tämä on varmistettu, täysin toimiva versio Joulugeneraattorista.
-     ÄLÄ MUOKKAA tätä tiedostoa — käytä kopiota kehitykseen.
-     Luotu: 5_muutos_fixed_v2.html -pohjasta
-     --------------------------------------------------------- -->
 <html lang="fi">
 <head>
-
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-
-
-<!------------ FONTIN VAIHTO GOOGLESTA HAETTU, LISÄKSI otsikko (h1) --------->
-
 <link href="https://fonts.googleapis.com/css2?family=Emilys+Candy&display=swap" rel="stylesheet">
-
-<!------------ NIMEN VAIHTO --------->
-<title>Joulugeneraattori — v4 active outline (fresh copy)</title>
-
-<!-- =========================================================
-     🎨 TYYLIT / CSS
-     --------------------------------------------------------- -->
+<title>TonttuStudio — v4 active outline (fresh copy)</title>
 
 <style>
-
-
-
-/* --- Allekirjoitus / Credits sivun oikeassa alakulmassa --- */
-.credits {
-  width: 100%;
-  text-align: right;
-  font-size: 15px;
-  color: #ffe7a5;
-  opacity: 0.95;
-  margin-top: 40px;
-  padding: 0 18px 16px 0;
-  font-family: "Segoe UI", "Noto Sans", sans-serif;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-  box-sizing: border-box;
+:root{ --red:#8d1b1b; --gold:#f6d778; --gold-edge:#7f642a; }
+html,body{height:100%}
+body{
+  margin:0; background:var(--red); color:#fff;
+  font-family:system-ui; -webkit-font-smoothing:antialiased;
 }
-.credits strong {
-  color: var(--gold);
-  font-weight: 700;
+.wrap{max-width:720px;margin:0 auto;padding:16px}
+
+h1{
+  margin:8px 0 12px; font-size:42px; text-align:center;
+  color:#ffd700; text-shadow:0 2px 0 rgba(0,0,0,.25),0 0 16px rgba(243,209,119,.35);
+  font-family:'Emilys Candy',cursive; font-weight:700;
 }
 
+.toolbar{
+  display:flex; gap:10px; justify-content:center; margin-bottom:12px;
+  overflow-x:auto; padding:2px;
+}
+button,label.button{
+  background:linear-gradient(#ffe7a5,#e5c66d); color:#2b1c00;
+  border:2px solid var(--gold-edge); padding:10px 18px; font-weight:700;
+  border-radius:24px; font-size:16px; box-shadow:0 4px 0 #6e5624,0 8px 18px rgba(0,0,0,.25);
+  cursor:pointer;
+}
+input[type=file]{display:none}
 
-  /* -------------------- Värit ja perusfontit -------------------- */
-  :root{ --red:#8d1b1b; --gold:#f6d778; --gold-edge:#7f642a; }
-  html,body{height:100%}
-  body{
-    margin:0; background:var(--red); color:#fff;
-    font-family:system-ui, ui-rounded, "SF Pro Rounded", "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, Arial, sans-serif;
-    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-  }
+.preview{
+  width:100%; aspect-ratio:1/1; background:#000; border-radius:16px;
+  border:3px solid var(--gold); overflow:hidden; position:relative;
+}
+canvas{width:100%;height:100%;display:block;background:#000}
 
-  /* -------------------- Sivun runko / keskuskolumni -------------------- */
-  .wrap{max-width:720px;margin:0 auto;padding:16px}
+.note{ color:#ffe7a5; font-size:13px; margin:8px 0 12px; }
 
-/* --------------------XXXX Otsikko (h1) XXXX -------------------- */
-h1 {
-  margin: 8px 0 12px;
-  font-size: 42px;
-  line-height: 1.05;
-  color: #ffd700;
-  text-shadow: 0 2px 0 rgba(0, 0, 0, .25), 0 0 16px rgba(243, 209, 119, .35);
-  text-align: center;
-  font-weight: 700;
+.thumbs{
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:10px; padding:4px 2px 2px; margin-bottom:6px;
+}
+.thumb{
+  border-radius:14px; padding:6px; background:rgba(0,0,0,.55);
+  box-shadow:0 0 0 2px rgba(243,209,119,.30) inset,0 6px 16px rgba(0,0,0,.35);
+  display:flex; align-items:center; justify-content:center;
+  aspect-ratio:1/1; overflow:hidden;
+}
+.thumb img{max-width:100%;max-height:100%;user-select:none;cursor:pointer;-webkit-user-drag:none;}
 
-  font-family: 'Emilys Candy', cursive;
+.thumb-title{ grid-column:1/-1; font-weight:700; padding:6px 0 2px; color:#ffd700;}
 
-  letter-spacing: .3px;
+.remove-btn{
+  position:absolute;color:#fff;font-size:22px;font-weight:900;
+  text-shadow:0 1px 2px rgba(0,0,0,.7);
+  transform:translate(-50%,-50%); z-index:5; pointer-events:auto;
 }
 
-
-  /* -------------------- Työkalupalkki ja napit -------------------- */
-  .toolbar{
-    display:flex; gap:10px; justify-content:center; align-items:center;
-    margin-bottom:12px; flex-wrap:nowrap; overflow-x:auto; padding:2px;
-  }
-  button,label.button{
-    white-space:nowrap; background:linear-gradient(#ffe7a5,#e5c66d); color:#2b1c00;
-    border:2px solid var(--gold-edge); padding:10px 18px; font-weight:700; border-radius:24px; font-size:16px;
-    box-shadow:0 4px 0 #6e5624, 0 8px 18px rgba(0,0,0,.25); cursor:pointer; touch-action:manipulation;
-  }
-  input[type=file]{display:none}
-
-  /* -------------------- Esikatselualue / Canvas-kehys -------------------- */
-  .preview{
-    width:100%; aspect-ratio:1/1; background:#000; border-radius:16px; border:3px solid var(--gold);
-    overflow:hidden; position:relative; margin:0 auto 10px; touch-action:none;
-  }
-  canvas{width:100%; height:100%; display:block; background:#000}
-
-  /* -------------------- Pieni ohjeteksti -------------------- */
-  .note{ text-align:left; color:#ffe7a5; font-size:13px; margin:8px 0 12px; line-height:1.35; }
-
-  /* -------------------- Pikkukuvien ruudukko (5x5) -------------------- */
-  .thumbs{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:10px; padding:4px 2px 2px; margin-bottom:6px;
-  }
-  .thumb{
-    border-radius:14px; padding:6px; background:rgba(0,0,0,.55);
-    box-shadow:0 0 0 2px rgba(243,209,119,.30) inset, 0 6px 16px rgba(0,0,0,.35);
-    display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; overflow:hidden;
-  }
-  .thumb img{ max-width:100%; max-height:100%; display:block; cursor:pointer; user-select:none; -webkit-user-drag:none; }
-
-  /* Otsikot omille riveilleen ruudukossa */
-  .thumb-title { grid-column: 1 / -1; }
-
-  /* -------------------- Poistoruksi (x), näkyy aktiivisessa -------------------- */
-  .remove-btn{
-    position:absolute;
-    color:#fff; font-weight:900; font-size:22px; line-height:1;
-    text-shadow: 0 1px 2px rgba(0,0,0,.7), 0 0 6px rgba(0,0,0,.5);
-    user-select:none; z-index:5; pointer-events:auto;
-    transform:translate(-50%,-50%);
-  }
-
-/* =========================================================
-     🖼️ ESIKATSELUN TAUSTAKUVA / ANIMAATIO-ALUE
-     ---------------------------------------------------------
-   ========================================================= */
-
-
-
-
-
-
+.credits{
+  text-align:right;margin-top:40px;padding:0 18px 16px 0;font-size:15px;color:#ffe7a5;
+  text-shadow:0 1px 3px rgba(0,0,0,.6);
+}
+.credits strong{color:var(--gold)}
 </style>
 
-
-
-
-<!-- =========================================================
-     📦 KOLMANNEN OSAPUOLEN KIRJASTO (HEIC → PNG muunnos)
-     --------------------------------------------------------- -->
 <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 </head>
 
 <body>
 <div class="wrap">
 
+<h1>TonttuStudio</h1>
 
+<div class="toolbar">
+  <label for="file" class="button">Avaa kuva</label>
+  <input id="file" type="file" accept="image/*,image/heic,image/heif,image/webp"/>
+  <button id="save">Tallenna</button>
+  <button id="clear">Tyhjennä</button>
+</div>
 
+<div class="preview" id="preview">
+  <canvas id="c" width="1200" height="1200"></canvas>
+</div>
 
+<div class="note">Valitse tausta, lisää kirjastosta koriste. Tausta lukittuu ensimmäisestä koristeesta.</div>
 
-
-  <!-- =====================================================
-       🏷️ OTSIKKO          VAIHDA TEKSTI TÄHÄN
-       ----------------------------------------------------- -->
-
-
- <h1 style="text-align:center; font-family:'Emilys Candy', cursive; color:#ffd700; text-shadow:0 2px 0 rgba(0,0,0,.25), 0 0 16px rgba(243,209,119,.35);">
-  <span style="display:inline-block; vertical-align:middle; margin-right:8px;">
-    <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" width="44" height="44" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,.35));">
-      <!-- tonttulakki -->
-      <path d="M50 15 Q70 0 80 25 L50 25 Z" fill="#c41616" stroke="#7f0d0d" stroke-width="3" stroke-linejoin="round"/>
-      <circle cx="82" cy="20" r="6" fill="#fff"/>
-      <!-- pää -->
-      <circle cx="50" cy="40" r="18" fill="#f6d7b0" stroke="#d6a87c" stroke-width="3"/>
-      <!-- parta -->
-      <path d="M32 48 Q50 80 68 48 Z" fill="#fff" stroke="#ddd" stroke-width="2"/>
-      <!-- vartalo -->
-      <rect x="38" y="66" width="24" height="32" rx="8" ry="8" fill="#c41616" stroke="#7f0d0d" stroke-width="3"/>
-      <!-- silmät -->
-      <circle cx="44" cy="38" r="2.5" fill="#222"/><circle cx="56" cy="38" r="2.5" fill="#222"/>
-      <!-- vyö -->
-      <rect x="38" y="80" width="24" height="6" fill="#222"/><rect x="48" y="80" width="4" height="6" fill="#ffd700"/>
-    </svg>
-  </span>
-  TonttuStudio
-</h1>
-
-
-
-
-
-
-
- <!-- =====================================================
-       🧭 TYÖKALUPALKIN PAINIKKEET
-       ----------------------------------------------------- -->
-  <div class="toolbar">
-    <label for="file" class="button">Avaa kuva</label>
-    <input id="file" type="file" accept="image/*,image/heic,image/heif,image/webp"/>
-    <button id="save">Tallenna</button>
-    <button id="clear">Tyhjennä</button>
-  </div>
-
-  <!-- =====================================================
-       🖼️ ESIKATSELUALUE / CANVAS
-       ----------------------------------------------------- -->
-  <div class="preview" id="preview">
-    <canvas id="c" width="1200" height="1200" aria-label="Esikatselu"></canvas>
-  </div>
-
-  <!-- =====================================================
-       📋 OHJE / NOTE
-       ----------------------------------------------------- -->
-  <div class="note">Valitse tausta, lisää kirjastosta koriste. Tausta lukittuu ensimmäisestä koristeesta.</div>
-
-  <!-- =====================================================
-       💻 JAVASCRIPT: TOIMINNALLISUUS
-       ----------------------------------------------------- -->
 <script>
 (function(){
-  'use strict';
+'use strict';
 
-  /* -------------------- Asetukset ja vakiot -------------------- */
-  const MAX_LONG_EDGE = 3000;
-  const BG_MIN = 0.2, BG_MAX = 6.0;
-  const STICKER_MIN = 0.4, STICKER_MAX = 10.0;
-  const BASE_STICKER = 300;
+const MAX_LONG_EDGE=3000;
+const BG_MIN=0.2,BG_MAX=6.0;
+const STICKER_MIN=0.4,STICKER_MAX=10.0;
+const BASE_STICKER=300;
 
-  /* -------------------- DOM-viittaukset -------------------- */
-  const file = document.getElementById('file');
-  const save = document.getElementById('save');
-  const clearBtn = document.getElementById('clear');
-  const canvas = document.getElementById('c');
-  const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
-  const preview = document.getElementById('preview');
+const file=document.getElementById('file');
+const save=document.getElementById('save');
+const clearBtn=document.getElementById('clear');
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d',{alpha:false,desynchronized:true});
+const preview=document.getElementById('preview');
 
-  /* -------------------- Taustapuskuri (back buffer) -------------------- */
-  const back = document.createElement('canvas'); back.width = canvas.width; back.height = canvas.height;
-  const bctx = back.getContext('2d', {alpha:false});
+const back=document.createElement('canvas');
+back.width=canvas.width; back.height=canvas.height;
+const bctx=back.getContext('2d',{alpha:false});
 
-  /* -------------------- Tilamuuttujat -------------------- */
-  let saveCount = 1;
-  let bgBitmap = null;
-  let bg = { x:0, y:0, scale:1 };
-  let bgLocked = false;
+let bgBitmap=null;
+let bg={x:0,y:0,scale:1};
+let bgLocked=false;
 
-  let stickers = [];
-  let activeIndex = -1;
+let stickers=[];
+let activeIndex=-1;
 
-  let needsRedraw = true;
-  let pointers = new Map();
-  let draggingBG = false;
-  let stickerGesture = null;
+let needsRedraw=true;
+let pointers=new Map();
+let draggingBG=false;
+let stickerGesture=null;
 
-  /* -------------------- Poistonappi (x) -------------------- */
-  const delBtn = document.createElement('div');
-  delBtn.className = 'remove-btn';
-  delBtn.textContent = 'x';
-  delBtn.style.display = 'none';
-  preview.appendChild(delBtn);
-  delBtn.addEventListener('click', ()=>{
-    if(activeIndex>=0){
-      stickers.splice(activeIndex,1);
-      activeIndex = stickers.length-1;
-      if(stickers.length===0) bgLocked=false;
-      needsRedraw=true;
-      updateDeleteButtonPosition();
-    }
-  });
+const delBtn=document.createElement('div');
+delBtn.className='remove-btn';
+delBtn.textContent='x';
+delBtn.style.display='none';
+preview.appendChild(delBtn);
 
-  /* -------------------- Piirtosilmukka -------------------- */
-  requestAnimationFrame(function loop(){ if(needsRedraw){ draw(); needsRedraw=false; } requestAnimationFrame(loop); });
-
-  /* -------------------- Piirron apufunktiot -------------------- */
-  function clearCanvas(target){ const t = target||ctx; t.fillStyle = '#000'; t.fillRect(0,0,canvas.width,canvas.height); }
-  function hardResetPointers(){ pointers.clear(); draggingBG=false; stickerGesture=null; if(bg) bg._pinch=null; }
-  function resetAll(){
-    bgBitmap=null; bg={x:0,y:0,scale:1}; bgLocked=false;
-    stickers=[]; activeIndex=-1; saveCount=1;
-    clearCanvas(ctx); clearCanvas(bctx); hardResetPointers(); needsRedraw=true;
-    delBtn.style.display='none';
+delBtn.addEventListener('click',()=>{
+  if(activeIndex>=0){
+    stickers.splice(activeIndex,1);
+    activeIndex=stickers.length-1;
+    if(stickers.length===0) bgLocked=false;
+    needsRedraw=true;
+    updateDeleteButtonPosition();
   }
+});
+
+requestAnimationFrame(function loop(){
+  if(needsRedraw){draw();needsRedraw=false;}
+  requestAnimationFrame(loop);
+});
+
+function clearCanvas(t){(t||ctx).fillStyle='#000';(t||ctx).fillRect(0,0,canvas.width,canvas.height);}
+clearCanvas(ctx);clearCanvas(bctx);
+
+function hardResetPointers(){pointers.clear();draggingBG=false;stickerGesture=null;if(bg)bg._pinch=null;}
+
+function resetAll(){
+  bgBitmap=null; bg={x:0,y:0,scale:1}; bgLocked=false;
+  stickers=[]; activeIndex=-1;
   clearCanvas(ctx); clearCanvas(bctx);
+  hardResetPointers(); needsRedraw=true;
+  delBtn.style.display='none';
+}
 
-  /* -------------------- KUVAN DEKoodaus ja skaalaus -------------------- */
-  async function decodeSmart(f){
-    if('createImageBitmap'in window){
-      try{
-        const bmp = await createImageBitmap(f,{imageOrientation:'from-image',premultiplyAlpha:'premultiply'});
-        return bmp;
-      }catch(_){}
-    }
-    const url = URL.createObjectURL(f);
-    return await new Promise((res,rej)=>{
-      const img=new Image();
-      img.onload=()=>{URL.revokeObjectURL(url);res(img)};
-      img.onerror=rej; img.src=url;
-    });
+async function decodeSmart(f){
+  if('createImageBitmap'in window){
+    try{return await createImageBitmap(f,{imageOrientation:'from-image',premultiplyAlpha:'premultiply'});}catch(_){}
   }
-  function downscaleToMaxEdge(bitmap){
-    const iw=bitmap.width, ih=bitmap.height;
-    const k = Math.min(MAX_LONG_EDGE/Math.max(iw,ih),1);
-    const ow=Math.round(iw*k), oh=Math.round(ih*k);
-    const off=document.createElement('canvas'); off.width=ow; off.height=oh;
-    const g=off.getContext('2d'); g.imageSmoothingEnabled=true; g.imageSmoothingQuality='high';
-    g.drawImage(bitmap,0,0,ow,oh); return off;
-  }
-  function fitContain(){
-    const cw=canvas.width, ch=canvas.height, iw=bgBitmap.width, ih=bgBitmap.height;
-    const s=Math.min(cw/iw, ch/ih); bg.scale=s; bg.x=(cw-iw*s)/2; bg.y=(ch-ih*s)/2;
-  }
-  function clampBgScale(){
-    const cw=canvas.width, ch=canvas.height;
-    const iw=bgBitmap?.width||cw, ih=bgBitmap?.height||ch;
-    const contain=Math.min(cw/iw, ch/ih);
-    bg.scale=Math.max(contain*BG_MIN, Math.min(BG_MAX, bg.scale));
-  }
-
-  /* -------------------- Varsinainen renderöinti -------------------- */
-  function renderTo(targetCtx){
-    targetCtx.fillStyle='#000'; targetCtx.fillRect(0,0,canvas.width,canvas.height);
-    if(bgBitmap){
-      targetCtx.save();
-      targetCtx.imageSmoothingEnabled=true; targetCtx.imageSmoothingQuality='high';
-      targetCtx.translate(bg.x,bg.y); targetCtx.scale(bg.scale,bg.scale);
-      targetCtx.drawImage(bgBitmap,0,0); targetCtx.restore();
-    }
-    for(const st of stickers){
-      targetCtx.save();
-      targetCtx.translate(st.x, st.y); targetCtx.rotate(st.rot); targetCtx.scale(st.scale, st.scale);
-      const img=st.bitmap; const w=img.width, h=img.height;
-      const scale=Math.min(BASE_STICKER/w, BASE_STICKER/h);
-      targetCtx.scale(scale, scale);
-      targetCtx.drawImage(img, -w/2, -h/2);
-      targetCtx.restore();
-    }
-  }
-
-  /* -------------------- Koristeen korostuskehys -------------------- */
-  function roundedRectPath(g, x, y, w, h, r){
-    const rr = Math.min(r, Math.abs(w)/2, Math.abs(h)/2);
-    g.beginPath();
-    g.moveTo(x+rr, y);
-    g.lineTo(x+w-rr, y);
-    g.quadraticCurveTo(x+w, y, x+w, y+rr);
-    g.lineTo(x+w, y+h-rr);
-    g.quadraticCurveTo(x+w, y+h, x+w-rr, y+h);
-    g.lineTo(x+rr, y+h);
-    g.quadraticCurveTo(x, y+h, x, y+h-rr);
-    g.lineTo(x, y+rr);
-    g.quadraticCurveTo(x, y, x+rr, y);
-    g.closePath();
-  }
-  function drawOutlineForActive(){
-    if(activeIndex<0 || !stickers[activeIndex]) return;
-    const st = stickers[activeIndex];
-
-    ctx.save();
-    ctx.translate(st.x, st.y);
-    ctx.rotate(st.rot);
-    const img = st.bitmap, w=img.width, h=img.height;
-    const inner = Math.min(BASE_STICKER/w, BASE_STICKER/h) * st.scale;
-
-    ctx.scale(inner, inner);
-    ctx.lineWidth = 3 / inner;
-    ctx.strokeStyle = '#f6d778';
-    ctx.shadowColor='rgba(246,215,120,.35)';
-    ctx.shadowBlur=14;
-    ctx.lineJoin='round';
-
-    roundedRectPath(ctx, -w/2, -h/2, w, h, Math.min(w,h)*0.12);
-    ctx.stroke();
-    ctx.restore();
-
-    updateDeleteButtonPosition();
-  }
-
-  /* -------------------- Yhdistelmäpiirto (back → näkyvä) -------------------- */
-  function draw(){
-    renderTo(bctx);
-    ctx.drawImage(back,0,0);
-    drawOutlineForActive();
-    needsRedraw=false;
-  }
-
-  /* -------------------- Poistonapin sijainnin päivitys -------------------- */
-  function updateDeleteButtonPosition(){
-    if(activeIndex<0 || !stickers[activeIndex]){ delBtn.style.display='none'; return; }
-    delBtn.style.display='block';
-    const st = stickers[activeIndex];
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = rect.width / canvas.width;
-    const scaleY = rect.height / canvas.height;
-    const img = st.bitmap, w=img.width, h=img.height;
-    const innerScale = Math.min(BASE_STICKER/w, BASE_STICKER/h) * st.scale;
-    const px = (st.x + (w/2)*innerScale) * scaleX + rect.left;
-    const py = (st.y - (h/2)*innerScale) * scaleY + rect.top;
-    const pr = preview.getBoundingClientRect();
-    delBtn.style.left = (px - pr.left + 6) + 'px';
-    delBtn.style.top  = (py - pr.top  - 6) + 'px';
-  }
-
-  /* -------------------- Tiedoston avaus + LATAAN… -------------------- */
-  file.addEventListener('change', async (e)=>{
-    const f = e.target.files && e.target.files[0]; if(!f) return;
-    const label = document.querySelector('label[for="file"]');
-    const originalText = label.textContent;
-    label.textContent = "LATAAN..."; label.style.opacity = "0.6"; label.style.pointerEvents = "none";
-    try{
-      const isHeic=(/\.hei[cf]$/i.test(f.name||'')||/heic|heif/i.test(f.type||''));
-      if(isHeic && window.heic2any){
-        const pngBlob=await window.heic2any({blob:f,toType:'image/png'});
-        const url=URL.createObjectURL(pngBlob);
-        const img=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=url;});
-        URL.revokeObjectURL(url);
-        const off=document.createElement('canvas'); off.width=img.naturalWidth; off.height=img.naturalHeight;
-        const g=off.getContext('2d'); g.imageSmoothingEnabled=true; g.imageSmoothingQuality='high'; g.drawImage(img,0,0);
-        bgBitmap=downscaleToMaxEdge(off);
-      }else{
-        const bmp=await decodeSmart(f); bgBitmap=downscaleToMaxEdge(bmp);
-        if(bmp && bmp.close) try{ bmp.close(); }catch(_){}
-      }
-      fitContain(); clampBgScale(); needsRedraw=true;
-    }catch{ alert('Kuvan avaaminen epäonnistui.'); }
-    finally{
-      e.target.value=''; label.textContent=originalText; label.style.opacity='1'; label.style.pointerEvents='auto';
-    }
+  const url=URL.createObjectURL(f);
+  return new Promise((res,rej)=>{
+    const img=new Image();
+    img.onload=()=>{URL.revokeObjectURL(url);res(img)};
+    img.onerror=rej; img.src=url;
   });
+}
 
-  /* -------------------- Tallennus PNG:ksi -------------------- */
-  function pad3(n){ return String(n).padStart(3,'0'); }
-  save.addEventListener('click', ()=>{
-    const off=document.createElement('canvas'); off.width=canvas.width; off.height=canvas.height;
-    const g=off.getContext('2d',{alpha:false}); renderTo(g);
-    const filename=`Joulugeneraattori_${pad3(saveCount)}.png`;
-    off.toBlob((blob)=>{const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename;
-      document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000); saveCount++;
-    },'image/png',0.95);
-  });
+function downscaleToMaxEdge(bitmap){
+  const iw=bitmap.width, ih=bitmap.height;
+  const k=Math.min(MAX_LONG_EDGE/Math.max(iw,ih),1);
+  const ow=Math.round(iw*k), oh=Math.round(ih*k);
+  const off=document.createElement('canvas'); off.width=ow; off.height=oh;
+  const g=off.getContext('2d'); g.imageSmoothingEnabled=true;
+  g.drawImage(bitmap,0,0,ow,oh); return off;
+}
 
-  /* -------------------- Tyhjennys / Reset -------------------- */
-  clearBtn.addEventListener('click', resetAll);
+function fitContain(){
+  const cw=canvas.width,ch=canvas.height,iw=bgBitmap.width,ih=bgBitmap.height;
+  const s=Math.min(cw/iw,ch/ih); bg.scale=s;
+  bg.x=(cw-iw*s)/2; bg.y=(ch-ih*s)/2;
+}
 
-  /* -------------------- Pikkukuvat → Koristeiksi -------------------- */
-  window.addEventListener('load', ()=>{
-    const thumbs = document.getElementById('thumbs');
-    if(!thumbs) return;
+function clampBgScale(){
+  const cw=canvas.width,ch=canvas.height;
+  const iw=bgBitmap?.width||cw, ih=bgBitmap?.height||ch;
+  const contain=Math.min(cw/iw,ch/ih);
+  bg.scale=Math.max(contain*BG_MIN,Math.min(BG_MAX,bg.scale));
+}
 
-    async function addStickerFromUrl(url){
-      const img=new Image(); img.crossOrigin='anonymous';
-      await new Promise((r,j)=>{img.onload=r; img.onerror=j; img.src=url;});
-      const off=document.createElement('canvas'); off.width=img.naturalWidth; off.height=img.naturalHeight;
-      const g=off.getContext('2d'); g.imageSmoothingEnabled=true; g.imageSmoothingQuality='high'; g.drawImage(img,0,0);
-      stickers.push({bitmap:off,x:canvas.width/2,y:canvas.height/2,scale:1,rot:0});
-      activeIndex=stickers.length-1; if(stickers.length>0) bgLocked=true;
-      needsRedraw=true; updateDeleteButtonPosition();
-    }
+function renderTo(t){
+  t.fillStyle='#000'; t.fillRect(0,0,canvas.width,canvas.height);
+  if(bgBitmap){
+    t.save();
+    t.imageSmoothingEnabled=true;
+    t.translate(bg.x,bg.y); t.scale(bg.scale,bg.scale);
+    t.drawImage(bgBitmap,0,0); t.restore();
+  }
+  for(const st of stickers){
+    t.save();
+    t.translate(st.x,st.y); t.rotate(st.rot); t.scale(st.scale,st.scale);
+    const img=st.bitmap,w=img.width,h=img.height;
+    const scale=Math.min(BASE_STICKER/w,BASE_STICKER/h);
+    t.scale(scale,scale);
+    t.drawImage(img,-w/2,-h/2);
+    t.restore();
+  }
+}
 
-    thumbs.addEventListener('click', async (e)=>{
-      if(e.target.tagName!=='IMG' || !e.target.src) return;
-      await addStickerFromUrl(e.target.src);
-    });
-  });
+function roundedRectPath(g,x,y,w,h,r){
+  const rr=Math.min(r,Math.abs(w)/2,Math.abs(h)/2);
+  g.beginPath();
+  g.moveTo(x+rr,y);
+  g.lineTo(x+w-rr,y);
+  g.quadraticCurveTo(x+w,y,x+w,y+rr);
+  g.lineTo(x+w,y+h-rr);
+  g.quadraticCurveTo(x+w,y+h,x+w-rr,y+h);
+  g.lineTo(x+rr,y+h);
+  g.quadraticCurveTo(x,y+h,x,y+h-rr);
+  g.lineTo(x,y+rr);
+  g.quadraticCurveTo(x,y,x+rr,y);
+  g.closePath();
+}
 
-  /* -------------------- Eleet: drag/zoom/rotaatio -------------------- */
-  function canvasCoords(e){const r=canvas.getBoundingClientRect();
-    return { x:(e.clientX-r.left)*(canvas.width/r.width), y:(e.clientY-r.top)*(canvas.height/r.height) };}
+function drawOutlineForActive(){
+  if(activeIndex<0||!stickers[activeIndex])return;
+  const st=stickers[activeIndex];
 
-  canvas.addEventListener('pointerdown', (e)=>{
-    canvas.setPointerCapture(e.pointerId);
-    pointers.set(e.pointerId,{x:e.clientX, y:e.clientY});
-    const p=canvasCoords(e);
+  ctx.save();
+  ctx.translate(st.x,st.y); ctx.rotate(st.rot);
+  const img=st.bitmap,w=img.width,h=img.height;
+  const inner=Math.min(BASE_STICKER/w,BASE_STICKER/h)*st.scale;
+  ctx.scale(inner,inner);
 
-    let newActive = -1;
-    for(let i=stickers.length-1;i>=0;i--){
-      const st=stickers[i]; const box=140*st.scale;
-      if(Math.abs(p.x-st.x)<box && Math.abs(p.y-st.y)<box){ newActive=i; break; }
-    }
-    activeIndex = newActive;
-    updateDeleteButtonPosition();
+  ctx.lineWidth=3/inner;
+  ctx.strokeStyle='#f6d778';
+  ctx.shadowColor='rgba(246,215,120,.35)';
+  ctx.shadowBlur=14;
+  ctx.lineJoin='round';
 
-    if(activeIndex===-1 && !bgLocked){ draggingBG=true; } else { stickerGesture=null; }
-  });
+  roundedRectPath(ctx,-w/2,-h/2,w,h,Math.min(w,h)*0.12);
+  ctx.stroke();
+  ctx.restore();
 
-  canvas.addEventListener('pointermove', (e)=>{
-    if(!pointers.has(e.pointerId)) return;
-    const ent=pointers.get(e.pointerId);
-    const prevX = ent.prevX ?? ent.x ?? e.clientX;
-    const prevY = ent.prevY ?? ent.y ?? e.clientY;
-    ent.x=e.clientX; ent.y=e.clientY; ent.prevX=e.clientX; ent.prevY=e.clientY; pointers.set(e.pointerId,ent);
+  updateDeleteButtonPosition();
+}
 
-    const r=canvas.getBoundingClientRect();
-    const sx=canvas.width/r.width, sy=canvas.height/r.height;
-    const pts=Array.from(pointers.values());
+function draw(){
+  renderTo(bctx);
+  ctx.drawImage(back,0,0);
+  drawOutlineForActive();
+}
 
-    if(activeIndex!==-1){
-      const st=stickers[activeIndex];
-      if(pts.length===1){
-        st.x += (e.clientX-prevX)*sx; st.y += (e.clientY-prevY)*sy;
-      }else if(pts.length>=2){
-        const [p1,p2]=pts; const dx=p2.x-p1.x, dy=p2.y-p1.y;
-        const dist=Math.hypot(dx,dy); const ang=Math.atan2(dy,dx);
-        if(!stickerGesture) stickerGesture={dist, ang, scale0:st.scale, rot0:st.rot};
-        st.scale = Math.max(STICKER_MIN, Math.min(STICKER_MAX, stickerGesture.scale0*(dist/stickerGesture.dist)));
-        st.rot = stickerGesture.rot0 + (ang - stickerGesture.ang);
-      }
-      needsRedraw=true;
-      updateDeleteButtonPosition();
-      return;
-    }
+function updateDeleteButtonPosition(){
+  if(activeIndex<0||!stickers[activeIndex]){delBtn.style.display='none';return;}
+  delBtn.style.display='block';
+  const st=stickers[activeIndex];
+  const rect=canvas.getBoundingClientRect();
+  const scaleX=rect.width/canvas.width;
+  const scaleY=rect.height/canvas.height;
+  const img=st.bitmap,w=img.width,h=img.height;
+  const innerScale=Math.min(BASE_STICKER/w,BASE_STICKER/h)*st.scale;
+  const px=(st.x+(w/2)*innerScale)*scaleX+rect.left;
+  const py=(st.y-(h/2)*innerScale)*scaleY+rect.top;
 
-    if(!bgLocked){
-      if(pts.length===1 && draggingBG){
-        bg.x += (e.clientX-prevX)*sx; bg.y += (e.clientY-prevY)*sy; needsRedraw=true;
-      }else if(pts.length===2){
-        const [p1,p2]=pts; const dx=p2.x-p1.x, dy=p2.y-p1.y;
-        const dist=Math.hypot(dx,dy);
-        if(!bg._pinch) bg._pinch={dist, scale:bg.scale, x:bg.x, y:bg.y};
-        let factor = bg._pinch.scale * (dist/bg._pinch.dist);
-        const contain=Math.min(canvas.width/(bgBitmap?.width||canvas.width), canvas.height/(bgBitmap?.height||canvas.height));
-        factor=Math.max(contain*BG_MIN, Math.min(BG_MAX, factor));
-        const cx=((p1.x+p2.x)/2 - r.left)*(canvas.width/r.width);
-        const cy=((p1.y+p2.y)/2 - r.top)*(canvas.height/r.height);
-        bg.x = cx - (cx - bg._pinch.x) * (factor/bg._pinch.scale);
-        bg.y = cy - (cy - bg._pinch.y) * (factor/bg._pinch.scale);
-        bg.scale=factor; needsRedraw=true;
-      }
-    }
-  });
+  const pr=preview.getBoundingClientRect();
+  delBtn.style.left=(px-pr.left+6)+'px';
+  delBtn.style.top=(py-pr.top-6)+'px';
+}
 
-  function endPointer(e){ pointers.delete(e.pointerId); if(pointers.size===0){ draggingBG=false; if(bg) bg._pinch=null; stickerGesture=null; } }
-  canvas.addEventListener('pointerup', endPointer);
-  canvas.addEventListener('pointercancel', endPointer);
-  canvas.addEventListener('pointerleave', endPointer);
+file.addEventListener('change',async e=>{
+  const f=e.target.files?.[0]; if(!f)return;
 
-  canvas.addEventListener('wheel', (e)=>{
-    if(bgLocked) return;
-    e.preventDefault();
-    const r=canvas.getBoundingClientRect();
-    const scale=canvas.width/r.width;
-    const cx=(e.clientX-r.left)*scale, cy=(e.clientY-r.top)*scale;
-    let next = Math.exp(-e.deltaY*0.0015)*bg.scale;
-    const contain=Math.min(canvas.width/(bgBitmap?.width||canvas.width), canvas.height/(bgBitmap?.height||canvas.height));
-    next=Math.max(contain*BG_MIN, Math.min(BG_MAX,next));
-    bg.x = cx - (cx - bg.x) * (next/bg.scale);
-    bg.y = cy - (cy - bg.y) * (next/bg.scale);
-    bg.scale=next; needsRedraw=true;
-  }, {passive:false});
-})();
-</script>
+  const label=document.querySelector('label[for="file"]');
+  const txt=label.textContent;
+  label.textContent='LATAAN...'; label.style.opacity='0.6'; label.style.pointerEvents='none';
 
-  <!-- =====================================================
-       📦 KIRJASTO (PIKKUKUVAT)
-       ----------------------------------------------------- -->
-<div id="thumbs" class="thumbs">
+  try{
+    const isHeic=(/\.hei[cf]$/i.test(f.name||'')||/heic|heif/i.test(f.type||''));
+    if(isHeic&&window.heic2any){
+      const png=await window.heic2any({blob:f,toType:'image/png'});
+      const url=URL.createObjectURL(png);
+      const img=await new Promise((r,j)=>{const im=new Image();im.onload=()=>r(im);im.onerror=j;im.src=url;});
+      URL.revokeObjectURL(url);
 
-<!-- 🎄 Otsikko 1 -->
-<div class="thumb-title">Tekstit</div>
-
-<div class="thumb"><img src="https://i.postimg.cc/NMC5RjM8/jouluteksti.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/k4cR5PL4/621005e7-5c3c-4c82-b4cd-7a51d7eb2346.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/dVLDYCMW/Chat-GPT-Image-11-marrask-2025-klo-16-40-03.png" alt="Koriste 2" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/76bJb2V2/Teksti.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/7hSHL35d/pikkujoulut.png" alt="Koriste" /></div>
-
-
-
-<!-- 🎄 Otsikko -->
-<div class="thumb-title">Tonttulakit</div>
-
-<div class="thumb"><img src="https://i.postimg.cc/Dfb4DNVJ/b96b624fbda1d4e41a75064cc4abd761-1.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/hvgn2hW0/510307522834342588a48e1f61e365b6.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/RZ9N8V9q/e15aff05b343953069b448175042c3bd.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/kGYvHCgz/Whats-App-Image-2025-11-13-at-07-04-02-3.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/XJRVkGfC/Whats-App-Image-2025-11-13-at-07-04-02-2.png" alt="Koriste" /></div>
-
-
-
-<!-- 🎄 Otsikko 3 -->
-<div class="thumb-title">Päähärpäkkeet</div>
-<div class="thumb"><img src="https://i.postimg.cc/rmvCSkfy/karkkisarvet.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/htYPt5X4/Whats-App-Image-2025-11-13-at-07-04-03-15.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/CxxHXVjR/Chat-GPT-Image-12-marrask-2025-klo-18-47-55.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/SNkxj9DF/Sarvetkoristeilla.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/J4VPXrkL/Sarvipiirros.png" alt="Koriste" /></div>
-
-
-<!-- 🎄 Otsikko -->
-<div class="thumb-title">Herkut</div>
-<div class="thumb"><img src="https://i.postimg.cc/FFWpN81s/7a5826d6278c6a08de65a8a8a046c55c.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/cCnmL7Dq/55d7214cfcfbbf1215d070571faa6dd1.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/x8XmpFFd/sindrinkki.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/Hn2tyv9j/ce86f093cea190d6133900ba94033554.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/28CYNqqH/8e7b741404c6a555f7b38e12c6586d58.png" alt="Koriste" /></div>
-
-<!-- 🎄 Otsikko -->
-<div class="thumb-title">Hahmot</div>
-<div class="thumb"><img src="https://i.postimg.cc/8cnyjnHs/c9d98356454b8478211b85c85837c965.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/cLYVbw0y/8425ac82bb01df176c5ce62967e8eeeb.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/5tPdB1fx/4fb7385e575122c9976601623ce6d95e.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/bNs69fSK/tonttu.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/VNZB9Zpk/f2f391c062f628612c68d616992df8de.png" alt="Koriste" /></div>
-
-
-<!-- 🎄 Otsikko -->
-<div class="thumb-title">Naughty or Nice</div>
-<div class="thumb"><img src="https://i.postimg.cc/m28YZC7Y/naughtyleima.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/jj8rq8ZP/naughtyornice.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/FRcGCzdf/hohoho.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/NfT3WGXC/lappunen.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/J4KXC2gV/Kiss-Me.png" alt="Koriste" /></div>
-
-
-<!-- 🎄 Otsikko -->
-<div class="thumb-title">Koristeet</div>
-<div class="thumb"><img src="https://i.postimg.cc/59vqvy2q/e88b7a37aa2505fb02ce1c257916316e.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/x1sDfJFP/lehva.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/ZY7BWhrL/3acd09fadf0801d3953b1a263a223e46.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/QMW61Lj9/test-transparent.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/nLBBmwHG/ce2f1ccf372f3d66c788dbac18029180.png" alt="Koriste" /></div>
-
-
-<!-- 🎄 Otsikko 2 -->
-<div class="thumb-title">Kehykset</div>
-<div class="thumb"><img src="https://i.postimg.cc/cCqzmzYy/153d3702402e3c4ceec9f7edd176fcb9.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/V6F7qNY4/0e2eaa228cf3102c58f35ac63dc28a1a.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/c4PSzDS3/d61fb5acaca3e0f00bb72345d4d61fd2.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/4xR0tjGQ/ae0440441817152dee95faae4407aebd.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/vZkZWWhK/ae0738d73508eaeb94b1ff4056868099.png" alt="Koriste" /></div>
-
-<!-- 🎄 Otsikko -->
-<div class="thumb-title">Pidetäänkö näitä</div>
-<div class="thumb"><img src="https://i.postimg.cc/zXYMR3TC/d884adcf44fba2803ade616d1a9a6896.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/g0yrmxyS/8e3f76e9012da611c15228ed1413f410.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/Tw7d3gyf/d6c46da91d20791226612b884fa31d57.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/V6yTBN3J/e9c69015086ff691e605cf4eb242064b.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/B6rPRzCW/tonttu2.png" alt="Koriste" /></div>
-
-
-
-</div> <!-- /#thumbs -->
-
-<!-- =====================================================
-     📘 OHJE (PIKKUKUVAN LISÄYS)
-     ----------------------------------------------------- -->
-<!--
-1. Lataa kuva cleanpng.com.
-2. Avaa Photopea.com.
-3. Muokkaa ja tallenna: File → Export As → PNG.
-4. Lataa kuva postimages.org.
-5. Kopioi “Direct link” (https://i.postimg.cc/…png).
-6. Lisää rivi:
-   <div class="thumb"><img src="LINKKI" alt="Koriste X"></div> <!-- kuva X -->
--->
-
-</div> <!-- /.wrap -->
-
-
-<footer class="credits">
-  🎄 Joulumieltä toivottaa <strong>Kiia Kairamaa</strong> ✨
-</footer>
-
-</body>
-</html>
+      const off=document.createElement('canvas');
+      off.width=img.naturalWidth; off.height=img.naturalHeight;
+      off.getContext('2d').drawImage(img,0,0);
+      bgBitmap=downscaleToMaxEdge(off);
+    }else{
+      const bmp=await decodeSmart(f
