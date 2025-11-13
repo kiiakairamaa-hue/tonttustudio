@@ -620,8 +620,6 @@ function showSaveToast(){
 </footer>
 
 </div> <!-- /.wrap -->
-
-<!-- =====================================================
 <!-- =====================================================
      📢 TALLENNUSILMOITUS (TOAST) – SELKEÄMPI
      ----------------------------------------------------- -->
@@ -643,11 +641,11 @@ function showSaveToast(){
   opacity: 0;
   z-index: 99999;
 
-  /* Animaatio */
   transition:
     opacity 0.4s ease,
     transform 0.45s cubic-bezier(.16,1.4,.44,1.2);
 }
+
 #save-toast.show {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
@@ -660,16 +658,11 @@ function showSaveToast(){
 function showSaveToast() {
   const t = document.getElementById('save-toast');
   t.classList.add('show');
-
   setTimeout(() => {
     t.classList.remove('show');
   }, 1800);
 }
 </script>
 
-
 </body>
 </html>
-
-
-
