@@ -562,45 +562,51 @@ save.addEventListener('click', ()=>{
   /* -------------------- Tyhjennä -------------------- */
   clearBtn.addEventListener('click', resetAll);
 
-  /* -------------------- Pikkukuvat → stickeriksi -------------------- */
-  window.addEventListener('load', ()=>{
-    const thumbs = document.getElementById('thumbs');
-    if(!thumbs) return;
+ /* -------------------- Pikkukuvat → stickeriksi -------------------- */
+window.addEventListener('load', ()=>{
+  const thumbs = document.getElementById('thumbs');
+  if(!thumbs) return;
 
-    async function addStickerFromUrl(url){
-      const img=new Image();
-      await new Promise((res,rej)=>{img.onload=res; img.onerror=rej; img.src=url;});
+  async function addStickerFromUrl(url){
+    const img = new Image();
+    img.crossOrigin = "anonymous";   // ← ★ AINOA LISÄYS ★
 
-      const off=document.createElement('canvas');
-      off.width=img.naturalWidth;
-      off.height=img.naturalHeight;
-
-      const g=off.getContext('2d');
-      g.imageSmoothingEnabled=true;
-      g.imageSmoothingQuality='high';
-      g.drawImage(img,0,0);
-
-      stickers.push({
-        bitmap:off,
-        x:canvas.width/2,
-        y:canvas.height/2,
-        scale:1,
-        rot:0
-      });
-
-      activeIndex=stickers.length-1;
-      if(stickers.length>0) bgLocked=true;
-
-      needsRedraw=true;
-      updateDeleteButtonPosition();
-    }
-
-    thumbs.addEventListener('click', async (e)=>{
-      if(e.target.tagName!=='IMG' || !e.target.src) return;
-      await addStickerFromUrl(e.target.src);
+    await new Promise((res,rej)=>{
+      img.onload = res;
+      img.onerror = rej;
+      img.src = url;
     });
 
+    const off=document.createElement('canvas');
+    off.width=img.naturalWidth;
+    off.height=img.naturalHeight;
+
+    const g=off.getContext('2d');
+    g.imageSmoothingEnabled=true;
+    g.imageSmoothingQuality='high';
+    g.drawImage(img,0,0);
+
+    stickers.push({
+      bitmap:off,
+      x:canvas.width/2,
+      y:canvas.height/2,
+      scale:1,
+      rot:0
+    });
+
+    activeIndex=stickers.length-1;
+    if(stickers.length>0) bgLocked=true;
+
+    needsRedraw=true;
+    updateDeleteButtonPosition();
+  }
+
+  thumbs.addEventListener('click', async (e)=>{
+    if(e.target.tagName!=='IMG' || !e.target.src) return;
+    await addStickerFromUrl(e.target.src);
   });
+
+});
 
   /* -------------------- Eleohjaus -------------------- */
   function canvasCoords(e){
