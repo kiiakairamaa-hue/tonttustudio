@@ -629,28 +629,26 @@ function showSaveToast(){
 <style>
 #save-toast {
   position: fixed;
-  top: 60%;            /* alkaa hieman puolivälin alapuolelta */
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.6);
-  background: #fff;
-  color: #2b1c00;
-  padding: 26px 40px;
-  border-radius: 32px;
-  font-size: 26px;
+  transform: translate(-50%, -50%) scale(0.4);
+  background: #ffffff;
+  padding: 32px 48px;
+  border-radius: 40px;
+  font-size: 30px;
   font-weight: 900;
+  color: #3d2b00;
+  box-shadow: 0 12px 38px rgba(0,0,0,0.45);
+  border: 4px solid var(--gold-edge);
   opacity: 0;
-  box-shadow: 0 12px 35px rgba(0,0,0,0.4);
-  border: 3px solid var(--gold-edge);
-  text-shadow: 0 1px 1px rgba(255,255,255,.4);
+  z-index: 99999;
+
+  /* Animaatio */
   transition:
     opacity 0.4s ease,
-    transform 0.45s cubic-bezier(.17,.89,.32,1.28),
-    top 0.45s cubic-bezier(.17,.89,.32,1.28);
-  z-index: 99999;
+    transform 0.45s cubic-bezier(.16,1.4,.44,1.2);
 }
-
 #save-toast.show {
-  top: 50%;                 /* siirtyy keskelle ruutua */
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }
@@ -665,12 +663,13 @@ function showSaveToast() {
 
   setTimeout(() => {
     t.classList.remove('show');
-  }, 2000);
+  }, 1800);
 }
 </script>
 
 
 </body>
 </html>
+
 
 
