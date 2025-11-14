@@ -451,7 +451,7 @@ showSaveToast();
 
     let newActive = -1;
     for(let i=stickers.length-1;i>=0;i--){
-      const st=stickers[i]; const box=140*st.scale;
+      const st=stickers[i]; const box=260*st.scale;
       if(Math.abs(p.x-st.x)<box && Math.abs(p.y-st.y)<box){ newActive=i; break; }
     }
     activeIndex = newActive;
@@ -669,5 +669,6 @@ function showSaveToast() {
 
 </body>
 </html>
+
 
 
