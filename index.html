@@ -48,7 +48,15 @@ input[type=file]{display:none}
   width:100%; aspect-ratio:1/1; background:#000; border-radius:16px; border:3px solid var(--gold);
   overflow:hidden; position:relative; margin:0 auto 10px; touch-action:none;
 }
-canvas{width:100%; height:100%; display:block; background:#000}
+canvas{
+  width:100%;
+  height:100%;
+  display:block;
+  background:#000;
+  touch-action:none;
+  pointer-events:auto;
+}
+
 
 /* Ohjeteksti */
 .note{
@@ -661,4 +669,5 @@ function showSaveToast() {
 
 </body>
 </html>
+
 
