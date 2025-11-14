@@ -443,41 +443,62 @@ showSaveToast();
       y:(e.clientY-r.top)*(canvas.height/r.height)
     };
   }
-
   canvas.addEventListener('pointerdown', (e)=>{
     canvas.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId,{x:e.clientX, y:e.clientY});
-    const p=canvasCoords(e);
+    const p = canvasCoords(e);
 
     let newActive = -1;
-    for(let i=stickers.length-1;i>=0;i--){
-      const st=stickers[i]; const box=260*st.scale;
-      if(Math.abs(p.x-st.x)<box && Math.abs(p.y-st.y)<box){ newActive=i; break; }
+    for(let i = stickers.length - 1; i >= 0; i--){
+      const st = stickers[i];
+      const img = st.bitmap;
+      const w = img.width;
+      const h = img.height;
+      const baseScale = Math.min(BASE_STICKER / w, BASE_STICKER / h);
+      const fullScale = baseScale * st.scale;
+
+      // ⭐ Täydellinen tarran osuma kaikilla sormilla
+      if(
+        p.x >= st.x - (w/2)*fullScale &&
+        p.x <= st.x + (w/2)*fullScale &&
+        p.y >= st.y - (h/2)*fullScale &&
+        p.y <= st.y + (h/2)*fullScale
+      ){
+        newActive = i;
+        break;
+      }
     }
+
     activeIndex = newActive;
     updateDeleteButtonPosition();
 
-    if(activeIndex===-1 && !bgLocked){ draggingBG=true; } else { stickerGesture=null; }
+    if(activeIndex === -1 && !bgLocked){
+      draggingBG = true;
+    } else {
+      stickerGesture = null;
+    }
   });
 
   canvas.addEventListener('pointermove', (e)=>{
     if(!pointers.has(e.pointerId)) return;
-    const ent=pointers.get(e.pointerId);
+    const ent = pointers.get(e.pointerId);
     const prevX = ent.prevX ?? ent.x ?? e.clientX;
     const prevY = ent.prevY ?? ent.y ?? e.clientY;
-    ent.x=e.clientX; ent.y=e.clientY; ent.prevX=e.clientX; ent.prevY=e.clientY; pointers.set(e.pointerId,ent);
+    ent.x = e.clientX; ent.y = e.clientY; ent.prevX = e.clientX; ent.prevY = e.clientY;
+    pointers.set(e.pointerId, ent);
 
-    const r=canvas.getBoundingClientRect();
-    const sx=canvas.width/r.width, sy=canvas.height/r.height;
-    const pts=Array.from(pointers.values());
-if(activeIndex!==-1){
+    const r = canvas.getBoundingClientRect();
+    const sx = canvas.width / r.width;
+    const sy = canvas.height / r.height;
+    const pts = Array.from(pointers.values());
 
-      // 🔥 Tämä rivi korjaa ongelman: tausta ei enää vie nipistystä.
+    if(activeIndex !== -1){
+
       bgLocked = true;
 
       const st = stickers[activeIndex];
 
-      if(pts.length===1){
+      if(pts.length === 1){
         st.x += (e.clientX - prevX) * sx;
         st.y += (e.clientY - prevY) * sy;
 
@@ -488,7 +509,7 @@ if(activeIndex!==-1){
         const dist = Math.hypot(dx,dy);
         const ang = Math.atan2(dy,dx);
 
-        if(!stickerGesture) {
+        if(!stickerGesture){
           stickerGesture = {
             dist,
             ang,
@@ -497,9 +518,13 @@ if(activeIndex!==-1){
           };
         }
 
-        st.scale = Math.max(STICKER_MIN,
-                     Math.min(STICKER_MAX,
-                        stickerGesture.scale0 * (dist / stickerGesture.dist)));
+        st.scale = Math.max(
+          STICKER_MIN,
+          Math.min(
+            STICKER_MAX,
+            stickerGesture.scale0 * (dist / stickerGesture.dist)
+          )
+        );
 
         st.rot = stickerGesture.rot0 + (ang - stickerGesture.ang);
       }
@@ -507,38 +532,53 @@ if(activeIndex!==-1){
       needsRedraw = true;
       updateDeleteButtonPosition();
       return;
-}
+    }
 
 
     if(!bgLocked){
-      if(pts.length===1 && draggingBG){
-        bg.x += (e.clientX-prevX)*sx;
-        bg.y += (e.clientY-prevY)*sy;
-        needsRedraw=true;
-      }else if(pts.length===2){
-        const [p1,p2]=pts; const dx=p2.x-p1.x, dy=p2.y-p1.y;
-        const dist=Math.hypot(dx,dy);
-        if(!bg._pinch) bg._pinch={dist, scale:bg.scale, x:bg.x, y:bg.y};
-        let factor = bg._pinch.scale * (dist/bg._pinch.dist);
-        const contain=Math.min(canvas.width/(bgBitmap?.width||canvas.width), canvas.height/(bgBitmap?.height||canvas.height));
-        factor=Math.max(contain*BG_MIN, Math.min(BG_MAX, factor));
-        const cx=((p1.x+p2.x)/2 - r.left)*(canvas.width/r.width);
-        const cy=((p1.y+p2.y)/2 - r.top)*(canvas.height/r.height);
-        bg.x = cx - (cx - bg._pinch.x) * (factor/bg._pinch.scale);
-        bg.y = cy - (cy - bg._pinch.y) * (factor/bg._pinch.scale);
-        bg.scale=factor; needsRedraw=true;
+      if(pts.length === 1 && draggingBG){
+        bg.x += (e.clientX - prevX) * sx;
+        bg.y += (e.clientY - prevY) * sy;
+        needsRedraw = true;
+
+      } else if(pts.length === 2){
+        const [p1,p2] = pts;
+        const dx = p2.x - p1.x;
+        const dy = p2.y - p1.y;
+        const dist = Math.hypot(dx,dy);
+
+        if(!bg._pinch)
+          bg._pinch = {dist, scale: bg.scale, x: bg.x, y: bg.y};
+
+        let factor = bg._pinch.scale * (dist / bg._pinch.dist);
+        const contain = Math.min(
+          canvas.width / (bgBitmap?.width || canvas.width),
+          canvas.height / (bgBitmap?.height || canvas.height)
+        );
+
+        factor = Math.max(contain * BG_MIN, Math.min(BG_MAX, factor));
+
+        const cx = ((p1.x + p2.x)/2 - r.left) * (canvas.width / r.width);
+        const cy = ((p1.y + p2.y)/2 - r.top) * (canvas.height / r.height);
+
+        bg.x = cx - (cx - bg._pinch.x) * (factor / bg._pinch.scale);
+        bg.y = cy - (cy - bg._pinch.y) * (factor / bg._pinch.scale);
+
+        bg.scale = factor;
+        needsRedraw = true;
       }
     }
   });
 
   function endPointer(e){
     pointers.delete(e.pointerId);
-    if(pointers.size===0){
-      draggingBG=false;
-      if(bg) bg._pinch=null;
-      stickerGesture=null;
+    if(pointers.size === 0){
+      draggingBG = false;
+      if(bg) bg._pinch = null;
+      stickerGesture = null;
     }
   }
+
   canvas.addEventListener('pointerup', endPointer);
   canvas.addEventListener('pointercancel', endPointer);
   canvas.addEventListener('pointerleave', endPointer);
@@ -556,10 +596,6 @@ if(activeIndex!==-1){
     bg.y = cy - (cy - bg.y) * (next/bg.scale);
     bg.scale=next; needsRedraw=true;
   }, {passive:false});
-
-
-})();
-</script>
 
 <!-- =====================================================
      📦 KIRJASTO (PIKKUKUVAT)
@@ -691,6 +727,7 @@ function showSaveToast() {
 
 </body>
 </html>
+
 
 
 
