@@ -663,8 +663,28 @@ h1 {
   🎄 Joulumieltä toivottaa <strong>Kiia</strong> ✨
 </footer>
 
+     
+     
+<div id="visit-counter" style="
+  position: fixed;
+  bottom: 6px;
+  left: 8px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  z-index: 99999;
+  pointer-events: none;
+"></div>
+
+<script>
+  fetch('https://hits.sh/tonttustudio.github.io/tonttustudio/.json')
+    .then(r => r.json())
+    .then(d => document.getElementById('visit-counter').textContent = d.hits)
+    .catch(err => console.log('Visit counter error:', err));
+</script>
+
 </body>
 </html>
+
 
 
 
