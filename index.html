@@ -612,7 +612,7 @@ function updateScrollMode() {
   const preview = document.querySelector('.preview');
 
   // Käytä globaalia muuttujaa, joka päivittyy aina kun kuva avataan
-  if (!window.bgBitmap) {
+  if (!bgBitmap){
     preview.classList.add("scroll-mode");
   } else {
     preview.classList.remove("scroll-mode");
@@ -745,6 +745,7 @@ function updateScrollMode() {
 
 </body>
 </html>
+
 
 
 
