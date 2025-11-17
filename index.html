@@ -288,8 +288,10 @@ h1 {
     stickers=[]; activeIndex=-1; saveCount=1;
     clearCanvas(ctx); clearCanvas(bctx); hardResetPointers(); needsRedraw=true;
     delBtn.style.display='none';
+       updateScrollMode();
+
   }
-  clearCanvas(ctx); clearCanvas(bctx);
+ 
 
   /* -------------------- KUVAN DEKoodaus ja skaalaus -------------------- */
   async function decodeSmart(f){
@@ -569,17 +571,16 @@ file.addEventListener('change', async (e)=>{
   }, {passive:false});
 })();
 </script>
+
 <script>
-// Salli skrollaus, kun taustakuvaa ei ole
 function updateScrollMode() {
   const preview = document.querySelector('.preview');
-  if (!backgroundImage) {
+  if (!bgBitmap) {
     preview.classList.add("scroll-mode");
   } else {
     preview.classList.remove("scroll-mode");
   }
 }
-updateScrollMode();
 </script>
 
   <!-- =====================================================
@@ -693,27 +694,17 @@ updateScrollMode();
 
 <footer class="credits">
   🎄 Iloista joulumieltä toivottaa <strong>Kiia</strong> ✨
-     <img src="https://hits.sh/tonttustudio.github.io/tonttustudio.svg?style=flat-square" 
-     style="position:fixed; bottom:10px; left:10px; width:45px; opacity:0.45; z-index:99999;">
+  
 </footer>
 
      
-<div id="visit-counter" style="
-  position: fixed;
-  bottom: 6px;
-  left: 8px;
-  font-size: 11px;
-  color: rgba(255,255,255,0.55);
-  z-index: 99999;
-  pointer-events: none;
-"></div>
-
 
      
 
 
 </body>
 </html>
+
 
 
 
