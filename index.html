@@ -288,12 +288,27 @@ h1 {
   /* -------------------- Piirron apufunktiot -------------------- */
   function clearCanvas(target){ const t = target||ctx; t.fillStyle = '#000'; t.fillRect(0,0,canvas.width,canvas.height); }
   function hardResetPointers(){ pointers.clear(); draggingBG=false; stickerGesture=null; if(bg) bg._pinch=null; }
-  function resetAll(){
-    bgBitmap=null; bg={x:0,y:0,scale:1}; bgLocked=false;
-    stickers=[]; activeIndex=-1; saveCount=1;
-    clearCanvas(ctx); clearCanvas(bctx); hardResetPointers(); needsRedraw=true;
-    delBtn.style.display='none';
-       updateScrollMode();
+
+     function resetAll(){
+    bgBitmap = null;
+    window.bgBitmap = null;   // ← Tämä tekee scroll-modesta toimivan
+
+    bg = {x:0,y:0,scale:1};
+    bgLocked = false;
+
+    stickers = [];
+    activeIndex = -1;
+    saveCount = 1;
+
+    clearCanvas(ctx);
+    clearCanvas(bctx);
+    hardResetPointers();
+    needsRedraw = true;
+
+    delBtn.style.display = 'none';
+
+    updateScrollMode(); // ← Nyt toimii 100%
+}
 
   }
  
@@ -751,6 +766,7 @@ updateScrollMode();
 
 </body>
 </html>
+
 
 
 
