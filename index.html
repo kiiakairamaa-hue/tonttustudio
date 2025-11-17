@@ -143,9 +143,9 @@ h1 {
 
 /* Tämä sallii skrollauksen vain silloin kun kuvaa ei ole */
 .preview.scroll-mode {
-  touch-action: pan-y;
+  overflow-y: auto;      /* 🔥 tämä tekee skrollin mahdolliseksi */
+  touch-action: pan-y;   /* 🔥 tämä sallii kosketusskrollin */
 }
-
 
 </style>
 
@@ -745,6 +745,7 @@ function updateScrollMode() {
 
 </body>
 </html>
+
 
 
 
