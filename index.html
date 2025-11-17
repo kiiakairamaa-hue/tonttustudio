@@ -68,14 +68,22 @@ h1 {
   line-height: 1.05;
   color: #ffd700;
   text-shadow: 0 2px 0 rgba(0, 0, 0, .25), 0 0 16px rgba(243, 209, 119, .35);
-  text-align: center;
   font-weight: 700;
-
   font-family: 'Emilys Candy', cursive;
-
   letter-spacing: .3px;
+
+  /* Lisätty, jotta tonttu voi olla vasemmalla ja teksti yhä keskellä */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 
+/* Tonttu otsikon vasemmalla puolella – hieman otsikkoa korkeampi */
+.title-tonttu {
+  height: 70px;        /* voit säätää 60–90px */
+  display: block;
+}
 
   /* -------------------- Työkalupalkki ja napit -------------------- */
   .toolbar{
@@ -153,29 +161,29 @@ h1 {
 
 
 
-  <!-- =====================================================
-       🏷️ OTSIKKO          VAIHDA TEKSTI TÄHÄN
-       ----------------------------------------------------- -->
+<!-- =====================================================
+     🏷️ OTSIKKO – TONTTU VASEMMALLE
+     ----------------------------------------------------- -->
 
+<h1 style="
+  text-align:center;
+  font-family:'Emilys Candy', cursive;
+  color:#ffd700;
+  text-shadow:0 2px 0 rgba(0,0,0,.25), 0 0 16px rgba(243,209,119,.35);
+  font-weight:700;
+  font-size:42px;
+  line-height:1.05;
+  letter-spacing:.3px;
 
- <h1 style="text-align:center; font-family:'Emilys Candy', cursive; color:#ffd700; text-shadow:0 2px 0 rgba(0,0,0,.25), 0 0 16px rgba(243,209,119,.35);">
-  <span style="display:inline-block; vertical-align:middle; margin-right:8px;">
-    <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" width="44" height="44" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,.35));">
-      <!-- tonttulakki -->
-      <path d="M50 15 Q70 0 80 25 L50 25 Z" fill="#c41616" stroke="#7f0d0d" stroke-width="3" stroke-linejoin="round"/>
-      <circle cx="82" cy="20" r="6" fill="#fff"/>
-      <!-- pää -->
-      <circle cx="50" cy="40" r="18" fill="#f6d7b0" stroke="#d6a87c" stroke-width="3"/>
-      <!-- parta -->
-      <path d="M32 48 Q50 80 68 48 Z" fill="#fff" stroke="#ddd" stroke-width="2"/>
-      <!-- vartalo -->
-      <rect x="38" y="66" width="24" height="32" rx="8" ry="8" fill="#c41616" stroke="#7f0d0d" stroke-width="3"/>
-      <!-- silmät -->
-      <circle cx="44" cy="38" r="2.5" fill="#222"/><circle cx="56" cy="38" r="2.5" fill="#222"/>
-      <!-- vyö -->
-      <rect x="38" y="80" width="24" height="6" fill="#222"/><rect x="48" y="80" width="4" height="6" fill="#ffd700"/>
-    </svg>
-  </span>
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+">
+
+  <!-- 🧝‍♂️ Kalja-tonttu vasemmalle -->
+  <img src="Kaljatonttu.png" class="title-tonttu" style="height:70px; display:block;">
+
   TonttuStudio
 </h1>
 
@@ -655,6 +663,7 @@ h1 {
 
 </body>
 </html>
+
 
 
 
