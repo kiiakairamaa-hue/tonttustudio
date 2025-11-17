@@ -611,14 +611,20 @@ file.addEventListener('change', async (e)=>{
 function updateScrollMode() {
   const preview = document.querySelector('.preview');
 
-  // Käytä globaalia muuttujaa, joka päivittyy aina kun kuva avataan
-  if (!bgBitmap){
+  // Taustakuva EI ole asetettu → sallitaan skrollaus
+  if (!window.bgBitmap || window.bgBitmap === null) {
     preview.classList.add("scroll-mode");
-  } else {
+  }
+  // Taustakuva on → estetään skrollaus
+  else {
     preview.classList.remove("scroll-mode");
   }
 }
+
+// Ajetaan kerran sivun latauksessa
+updateScrollMode();
 </script>
+
 
 
   <!-- =====================================================
@@ -745,6 +751,7 @@ function updateScrollMode() {
 
 </body>
 </html>
+
 
 
 
