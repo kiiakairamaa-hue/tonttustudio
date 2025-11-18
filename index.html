@@ -149,6 +149,20 @@ h1 {
 
 
 </style>
+<script>
+function updateScrollMode() {
+  const previewEl = document.querySelector('.preview');
+  if (!previewEl) return;
+
+  // Jos tausta on olemassa → ei skrollia
+  if (bgBitmap) {
+    previewEl.classList.remove('scroll-mode');
+  } else {
+    // Ei taustaa → musta ruutu skrollaa
+    previewEl.classList.add('scroll-mode');
+  }
+}
+</script>
 
 
 
@@ -627,8 +641,6 @@ file.addEventListener('change', async (e)=>{
 })();
 </script>
 
-<script>
-
 
   <!-- =====================================================
        📦 KIRJASTO (PIKKUKUVAT)
@@ -754,18 +766,3 @@ file.addEventListener('change', async (e)=>{
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
