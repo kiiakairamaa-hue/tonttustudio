@@ -8,15 +8,10 @@
 <html lang="fi">
 <head>
 
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-
-
-
 <!------------ FONTIN VAIHTO GOOGLESTA HAETTU, LISÄKSI otsikko (h1) --------->
-
 <link href="https://fonts.googleapis.com/css2?family=Emilys+Candy&display=swap" rel="stylesheet">
 
 <!------------ NIMEN VAIHTO --------->
@@ -27,8 +22,6 @@
      --------------------------------------------------------- -->
 
 <style>
-
-
 
 /* --- Allekirjoitus / Credits sivun oikeassa alakulmassa --- */
 .credits {
@@ -48,18 +41,17 @@
   font-weight: 700;
 }
 
+/* -------------------- Värit ja perusfontit -------------------- */
+:root{ --red:#8d1b1b; --gold:#f6d778; --gold-edge:#7f642a; }
+html,body{height:100%}
+body{
+  margin:0; background:var(--red); color:#fff;
+  font-family:system-ui, ui-rounded, "SF Pro Rounded", "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, Arial, sans-serif;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
 
-  /* -------------------- Värit ja perusfontit -------------------- */
-  :root{ --red:#8d1b1b; --gold:#f6d778; --gold-edge:#7f642a; }
-  html,body{height:100%}
-  body{
-    margin:0; background:var(--red); color:#fff;
-    font-family:system-ui, ui-rounded, "SF Pro Rounded", "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, Arial, sans-serif;
-    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-  }
-
-  /* -------------------- Sivun runko / keskuskolumni -------------------- */
-  .wrap{max-width:720px;margin:0 auto;padding:16px}
+/* -------------------- Sivun runko / keskuskolumni -------------------- */
+.wrap{max-width:720px;margin:0 auto;padding:16px}
 
 /* --------------------XXXX Otsikko (h1) XXXX -------------------- */
 h1 {
@@ -76,98 +68,73 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 12px;
 }
 
 /* 🧝‍♂️ Tonttu otsikon vasemmalla – kokoa säädetään vain täällä */
 .title-tonttu {
   height: 70px;     /* ← muuta tätä kun haluat isommaksi/pienemmäksi */
   display: block;
-     transform: translateY(-6px); /* ← nosta tonttua hieman */
 }
 
+/* -------------------- Työkalupalkki ja napit -------------------- */
+.toolbar{
+  display:flex; gap:10px; justify-content:center; align-items:center;
+  margin-bottom:12px; flex-wrap:nowrap; overflow-x:auto; padding:2px;
+}
+button,label.button{
+  white-space:nowrap; background:linear-gradient(#ffe7a5,#e5c66d); color:#2b1c00;
+  border:2px solid var(--gold-edge); padding:10px 18px; font-weight:700; border-radius:24px; font-size:16px;
+  box-shadow:0 4px 0 #6e5624, 0 8px 18px rgba(0,0,0,.25); cursor:pointer; touch-action:manipulation;
+}
+input[type=file]{display:none}
 
-  /* -------------------- Työkalupalkki ja napit -------------------- */
-  .toolbar{
-    display:flex; gap:10px; justify-content:center; align-items:center;
-    margin-bottom:12px; flex-wrap:nowrap; overflow-x:auto; padding:2px;
-  }
-  button,label.button{
-    white-space:nowrap; background:linear-gradient(#ffe7a5,#e5c66d); color:#2b1c00;
-    border:2px solid var(--gold-edge); padding:10px 18px; font-weight:700; border-radius:24px; font-size:16px;
-    box-shadow:0 4px 0 #6e5624, 0 8px 18px rgba(0,0,0,.25); cursor:pointer; touch-action:manipulation;
-  }
-  input[type=file]{display:none}
+/* -------------------- Esikatselualue / Canvas-kehys -------------------- */
+.preview{
+  width:100%; aspect-ratio:1/1; background:#000; border-radius:16px; border:3px solid var(--gold);
+  overflow:hidden; position:relative; margin:0 auto 10px; touch-action:none;
+}
+canvas{width:100%; height:100%; display:block; background:#000}
 
-  /* -------------------- Esikatselualue / Canvas-kehys -------------------- */
-  .preview{
-    width:100%; aspect-ratio:1/1; background:#000; border-radius:16px; border:3px solid var(--gold);
-    overflow:hidden; position:relative; margin:0 auto 10px; touch-action:none;
-  }
-  canvas{width:100%; height:100%; display:block; background:#000}
+/* -------------------- Pieni ohjeteksti -------------------- */
+.note{ text-align:left; color:#ffe7a5; font-size:13px; margin:8px 0 12px; line-height:1.35; }
 
-  /* -------------------- Pieni ohjeteksti -------------------- */
-  .note{ text-align:left; color:#ffe7a5; font-size:13px; margin:8px 0 12px; line-height:1.35; }
+/* -------------------- Pikkukuvien ruudukko (5x5) -------------------- */
+.thumbs{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px; padding:4px 2px 2px; margin-bottom:6px;
+}
+.thumb{
+  border-radius:14px; padding:6px; background:rgba(0,0,0,.55);
+  box-shadow:0 0 0 2px rgba(243,209,119,.30) inset, 0 6px 16px rgba(0,0,0,.35);
+  display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; overflow:hidden;
+}
+.thumb img{ max-width:100%; max-height:100%; display:block; cursor:pointer; user-select:none; -webkit-user-drag:none; }
 
-  /* -------------------- Pikkukuvien ruudukko (5x5) -------------------- */
-  .thumbs{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:10px; padding:4px 2px 2px; margin-bottom:6px;
-  }
-  .thumb{
-    border-radius:14px; padding:6px; background:rgba(0,0,0,.55);
-    box-shadow:0 0 0 2px rgba(243,209,119,.30) inset, 0 6px 16px rgba(0,0,0,.35);
-    display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; overflow:hidden;
-  }
-  .thumb img{ max-width:100%; max-height:100%; display:block; cursor:pointer; user-select:none; -webkit-user-drag:none; }
+/* Otsikot omille riveilleen ruudukossa */
+.thumb-title { grid-column: 1 / -1; }
 
-  /* Otsikot omille riveilleen ruudukossa */
-  .thumb-title { grid-column: 1 / -1; }
-
-  /* -------------------- Poistoruksi (x), näkyy aktiivisessa -------------------- */
-  .remove-btn{
-    position:absolute;
-    color:#fff; font-weight:900; font-size:22px; line-height:1;
-    text-shadow: 0 1px 2px rgba(0,0,0,.7), 0 0 6px rgba(0,0,0,.5);
-    user-select:none; z-index:5; pointer-events:auto;
-    transform:translate(-50%,-50%);
-  }
+/* -------------------- Poistoruksi (x), näkyy aktiivisessa -------------------- */
+.remove-btn{
+  position:absolute;
+  color:#fff; font-weight:900; font-size:22px; line-height:1;
+  text-shadow: 0 1px 2px rgba(0,0,0,.7), 0 0 6px rgba(0,0,0,.5);
+  user-select:none; z-index:5; pointer-events:auto;
+  transform:translate(-50%,-50%);
+}
 
 /* =========================================================
      🖼️ ESIKATSELUN TAUSTAKUVA / ANIMAATIO-ALUE
      ---------------------------------------------------------
    ========================================================= */
 
-
-
-
 /* Tämä sallii skrollauksen vain silloin kun kuvaa ei ole */
 .preview.scroll-mode {
   touch-action: pan-y;
 }
 
-
 </style>
-<script>
-function updateScrollMode() {
-  const previewEl = document.querySelector('.preview');
-  if (!previewEl) return;
-
-  // Käytetään vain yhtä oikeaa globaalia muuttujaa
-  const hasBg = (window.bgBitmap !== null && window.bgBitmap !== undefined);
-
-  if (hasBg) {
-    previewEl.classList.remove('scroll-mode');   // kuva → ei scrollia
-  } else {
-    previewEl.classList.add('scroll-mode');      // ei kuvaa → scroll
-  }
-}
-
-</script>
-
-
-
 
 <!-- =========================================================
      📦 KOLMANNEN OSAPUOLEN KIRJASTO (HEIC → PNG muunnos)
@@ -177,11 +144,6 @@ function updateScrollMode() {
 
 <body>
 <div class="wrap">
-
-
-
-
-
 
 <!-- =====================================================
      🏷️ OTSIKKO – TONTTU VASEMMALLE
@@ -202,46 +164,39 @@ function updateScrollMode() {
   justify-content:center;
   gap:12px;
 ">
-
-  <!-- 🧝‍♂️ Kalja-tonttu vasemmalle -->
-<img src="https://i.postimg.cc/ZnTDyDrZ/Otsikontonttu1.png" class="title-tonttu" alt="Koriste" />
-
-
+  <img src="https://i.postimg.cc/bNs69fSK/tonttu.png" class="title-tonttu" alt="Koriste" />
   TonttuStudio
 </h1>
 
-
-
-
- <!-- =====================================================
-       🧭 TYÖKALUPALKIN PAINIKKEET
-       ----------------------------------------------------- -->
-  <div class="toolbar">
-    <label for="file" class="button">Avaa kuva</label>
-    <input id="file" type="file" accept="image/*,image/heic,image/heif,image/webp"/>
-    <button id="save">Tallenna</button>
-    <button id="clear">Tyhjennä</button>
-  </div>
-
-  <!-- =====================================================
-       🖼️ ESIKATSELUALUE / CANVAS
-       ----------------------------------------------------- -->
-<div class="preview" id="preview">
-
-    <canvas id="c" width="1200" height="1200" aria-label="Esikatselu"></canvas>
+<!-- =====================================================
+     🧭 TYÖKALUPALKIN PAINIKKEET
+     ----------------------------------------------------- -->
+<div class="toolbar">
+  <label for="file" class="button">Avaa kuva</label>
+  <input id="file" type="file" accept="image/*,image/heic,image/heif,image/webp"/>
+  <button id="save">Tallenna</button>
+  <button id="clear">Tyhjennä</button>
 </div>
 
+<!-- =====================================================
+     🖼️ ESIKATSELUALUE / CANVAS
+     ----------------------------------------------------- -->
+<div class="preview" id="preview">
+  <canvas id="c" width="1200" height="1200" aria-label="Esikatselu"></canvas>
+</div>
 
-  <!-- =====================================================
-       📋 OHJE / NOTE
-       ----------------------------------------------------- -->
-  <div class="note">Avaa kuva, sovita ruutuun ja lisää koristeita. Muokkaus ja kiertäminen kahdella sormella.</div>
+<!-- =====================================================
+     📋 OHJE / NOTE
+     ----------------------------------------------------- -->
+<div class="note">Avaa kuva, sovita ruutuun ja lisää koristeita. Muokkaus ja kiertäminen kahdella sormella.</div>
 
-  <!-- =====================================================
-       💻 JAVASCRIPT: TOIMINNALLISUUS
-       ----------------------------------------------------- -->
+<!-- =====================================================
+     💻 JAVASCRIPT: TOIMINNALLISUUS
+     ----------------------------------------------------- -->
 <script>
-     window.bgBitmap = null;   // 🔥 Pakotetaan alkuarvo → scroll toimii ennen kuvan avausta
+  // bgBitmap pitää olla globaalisti näkyvissä myös updateScrollMode-funktiolle
+  let bgBitmap = null;
+
 (function(){
   'use strict';
 
@@ -263,20 +218,20 @@ function updateScrollMode() {
   const back = document.createElement('canvas'); back.width = canvas.width; back.height = canvas.height;
   const bctx = back.getContext('2d', {alpha:false});
 
- /* -------------------- Tilamuuttujat -------------------- */
-let saveCount = 1;
-windowbgBitmap = null;            // taustakuva canvasille
-let bg = { x:0, y:0, scale:1 }; // taustakuvan sijainti ja skaala
-let bgLocked = false;           // lukitaanko tausta kun tarroja lisätään
+  /* -------------------- Tilamuuttujat -------------------- */
+  let saveCount = 1;
+  // käytetään globaalia bgBitmap-muuttujaa
+  bgBitmap = null;
+  let bg = { x:0, y:0, scale:1 };
+  let bgLocked = false;
 
-let stickers = [];              // tarrat
-let activeIndex = -1;           // aktiivisen tarran indeksi
+  let stickers = [];
+  let activeIndex = -1;
 
-let needsRedraw = true;         // piirtoflag
-let pointers = new Map();       // pointer-tapahtumien tietovarasto
-let draggingBG = false;         // raahataanko taustaa
-let stickerGesture = null;      // monisormen ele tarralle
-
+  let needsRedraw = true;
+  let pointers = new Map();
+  let draggingBG = false;
+  let stickerGesture = null;
 
   /* -------------------- Poistonappi (x) -------------------- */
   const delBtn = document.createElement('div');
@@ -295,52 +250,38 @@ let stickerGesture = null;      // monisormen ele tarralle
   });
 
   /* -------------------- Piirtosilmukka -------------------- */
-  requestAnimationFrame(function loop(){ if(needsRedraw){ draw(); needsRedraw=false; } requestAnimationFrame(loop); });
+  requestAnimationFrame(function loop(){
+    if(needsRedraw){
+      draw();
+      needsRedraw=false;
+    }
+    requestAnimationFrame(loop);
+  });
 
-   /* -------------------- Piirron apufunktiot -------------------- */
+  /* -------------------- Piirron apufunktiot -------------------- */
   function clearCanvas(target){
     const t = target||ctx;
     t.fillStyle = '#000';
     t.fillRect(0,0,canvas.width,canvas.height);
   }
-
   function hardResetPointers(){
     pointers.clear();
-    draggingBG = false;
-    stickerGesture = null;
-    if(bg) bg._pinch = null;
+    draggingBG=false;
+    stickerGesture=null;
+    if(bg) bg._pinch=null;
   }
-
- function resetAll(){
-  // Poistetaan taustakuva ja nollataan transformaatio
-  bgBitmap = null;
-  window.bgBitmap = null; // tärkeä scroll-mode logiikalle
-
-  bg = { x:0, y:0, scale:1 };
-  bgLocked = false;
-
-  // Poistetaan kaikki koristeet
-  stickers = [];
-  activeIndex = -1;
-  saveCount = 1;
-
-  // Tyhjennetään canvas ja tilat
-  clearCanvas(ctx);
-  clearCanvas(bctx);
-  hardResetPointers();
-  needsRedraw = true;
-
-  // Piilotetaan poistopainike
-  delBtn.style.display = 'none';
-
-  // Päivitetään scroll-tila: ei taustaa → saa scrollata
-  updateScrollMode();
-}
-
+  function resetAll(){
+    bgBitmap=null; bg={x:0,y:0,scale:1}; bgLocked=false;
+    stickers=[]; activeIndex=-1; saveCount=1;
+    clearCanvas(ctx); clearCanvas(bctx); hardResetPointers(); needsRedraw=true;
+    delBtn.style.display='none';
+    // päivitys: kun taustakuva poistuu, sallitaan skrollaus jälleen
+    updateScrollMode();
+  }
 
   /* -------------------- KUVAN DEKoodaus ja skaalaus -------------------- */
   async function decodeSmart(f){
-    if('createImageBitmap'in window){
+    if('createImageBitmap' in window){
       try{
         const bmp = await createImageBitmap(f,{imageOrientation:'from-image',premultiplyAlpha:'premultiply'});
         return bmp;
@@ -456,72 +397,44 @@ let stickerGesture = null;      // monisormen ele tarralle
     delBtn.style.top  = (py - pr.top  - 6) + 'px';
   }
 
-/* -------------------- Tiedoston avaus + LATAAN… -------------------- */
-file.addEventListener('change', async (e)=>{
-  const f = e.target.files && e.target.files[0]; 
-  if(!f) return;
+  /* -------------------- Tiedoston avaus + LATAAN… -------------------- */
+  file.addEventListener('change', async (e)=>{
+    const f = e.target.files && e.target.files[0]; if(!f) return;
+    const label = document.querySelector('label[for="file"]');
+    const originalText = label.textContent;
+    label.textContent = "LATAAN..."; label.style.opacity = "0.6"; label.style.pointerEvents = "none";
+    try{
+      const isHeic=(/\.hei[cf]$/i.test(f.name||'')||/heic|heif/i.test(f.type||''));
+      if(isHeic && window.heic2any){
+        const pngBlob=await window.heic2any({blob:f,toType:'image/png'});
+        const url=URL.createObjectURL(pngBlob);
+        const img=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=url;});
+        URL.revokeObjectURL(url);
+        const off=document.createElement('canvas'); off.width=img.naturalWidth; off.height=img.naturalHeight;
+        const g=off.getContext('2d'); g.imageSmoothingEnabled=true; g.imageSmoothingQuality='high'; g.drawImage(img,0,0);
+        bgBitmap=downscaleToMaxEdge(off);
+      }else{
+        const bmp=await decodeSmart(f); bgBitmap=downscaleToMaxEdge(bmp);
+        if(bmp && bmp.close) try{ bmp.close(); }catch(_){}
+      }
 
-  const label = document.querySelector('label[for="file"]');
-  const originalText = label.textContent;
+      fitContain(); 
+      clampBgScale(); 
+      needsRedraw=true;
 
-  label.textContent = "LATAAN...";
-  label.style.opacity = "0.6";
-  label.style.pointerEvents = "none";
+      // kun taustakuva on asetettu, estetään skrollaus esikatselualueella
+      updateScrollMode();
 
-  try {
-    const isHeic = (/\.hei[cf]$/i.test(f.name||'') || /heic|heif/i.test(f.type||''));
-
-    if (isHeic && window.heic2any) {
-      const pngBlob = await window.heic2any({ blob: f, toType: 'image/png' });
-      const url = URL.createObjectURL(pngBlob);
-
-      const img = await new Promise((res, rej)=>{
-        const im = new Image();
-        im.onload = ()=>res(im);
-        im.onerror = rej;
-        im.src = url;
-      });
-
-      URL.revokeObjectURL(url);
-
-      const off = document.createElement('canvas');
-      off.width = img.naturalWidth;
-      off.height = img.naturalHeight;
-
-      const g = off.getContext('2d');
-      g.imageSmoothingEnabled = true;
-      g.imageSmoothingQuality = 'high';
-      g.drawImage(img, 0, 0);
-
-      bgBitmap = downscaleToMaxEdge(off);
-window.bgBitmap = bgBitmap;
-
-    } else {
-      const bmp = await decodeSmart(f);
-      bgBitmap = downscaleToMaxEdge(bmp);
-      if (bmp && bmp.close) try { bmp.close(); } catch(_){}
+    }catch{ 
+      alert('Kuvan avaaminen epäonnistui.');
     }
-
-
-    fitContain();
-    clampBgScale();
-    needsRedraw = true;
-
-    /* 🔥 Päivitä scroll-mode vasta, kun bgBitmap on oikeasti asetettu */
-    updateScrollMode();
-
-  } catch {
-    alert('Kuvan avaaminen epäonnistui.');
-  }
-
-  finally {
-    e.target.value = '';
-    label.textContent = originalText;
-    label.style.opacity = '1';
-    label.style.pointerEvents = 'auto';
-  }
-});
-
+    finally{
+      e.target.value=''; 
+      label.textContent=originalText; 
+      label.style.opacity='1'; 
+      label.style.pointerEvents='auto';
+    }
+  });
 
   /* -------------------- Tallennus PNG:ksi -------------------- */
   function pad3(n){ return String(n).padStart(3,'0'); }
@@ -559,8 +472,10 @@ window.bgBitmap = bgBitmap;
   });
 
   /* -------------------- Eleet: drag/zoom/rotaatio -------------------- */
-  function canvasCoords(e){const r=canvas.getBoundingClientRect();
-    return { x:(e.clientX-r.left)*(canvas.width/r.width), y:(e.clientY-r.top)*(canvas.height/r.height) };}
+  function canvasCoords(e){
+    const r=canvas.getBoundingClientRect();
+    return { x:(e.clientX-r.left)*(canvas.width/r.width), y:(e.clientY-r.top)*(canvas.height/r.height) };
+  }
 
   canvas.addEventListener('pointerdown', (e)=>{
     canvas.setPointerCapture(e.pointerId);
@@ -624,7 +539,14 @@ window.bgBitmap = bgBitmap;
     }
   });
 
-  function endPointer(e){ pointers.delete(e.pointerId); if(pointers.size===0){ draggingBG=false; if(bg) bg._pinch=null; stickerGesture=null; } }
+  function endPointer(e){
+    pointers.delete(e.pointerId);
+    if(pointers.size===0){
+      draggingBG=false;
+      if(bg) bg._pinch=null;
+      stickerGesture=null;
+    }
+  }
   canvas.addEventListener('pointerup', endPointer);
   canvas.addEventListener('pointercancel', endPointer);
   canvas.addEventListener('pointerleave', endPointer);
@@ -642,9 +564,26 @@ window.bgBitmap = bgBitmap;
     bg.y = cy - (cy - bg.y) * (next/bg.scale);
     bg.scale=next; needsRedraw=true;
   }, {passive:false});
-})();
+
+})();  // IIFE loppu
 </script>
 
+<script>
+function updateScrollMode() {
+  const preview = document.querySelector('.preview');
+  if (!preview) return;
+
+  // jos bgBitmap on null/undefined → sallitaan skrollaus
+  if (!bgBitmap) {
+    preview.classList.add("scroll-mode");
+  } else {
+    preview.classList.remove("scroll-mode");
+  }
+}
+
+// ajetaan kerran sivun latauksessa (alussa ei taustakuvaa)
+updateScrollMode();
+</script>
 
   <!-- =====================================================
        📦 KIRJASTO (PIKKUKUVAT)
@@ -660,8 +599,6 @@ window.bgBitmap = bgBitmap;
 <div class="thumb"><img src="https://i.postimg.cc/76bJb2V2/Teksti.png" alt="Koriste" /></div>
 <div class="thumb"><img src="https://i.postimg.cc/wBzGvQYt/Chat-GPT-Image-14-marrask-2025-klo-12-06-17.png" alt="#pikkujoulut2025" /></div>
 
-
-
 <!-- 🎄 Otsikko -->
 <div class="thumb-title">Tonttulakit</div>
 
@@ -671,7 +608,6 @@ window.bgBitmap = bgBitmap;
 <div class="thumb"><img src="https://i.postimg.cc/sDv80JrB/hat-1.png" alt="Koriste" /></div>
 <div class="thumb"><img src="https://i.postimg.cc/KYK1sw86/rusetti.png" alt="Rusetti" /></div>
 
-
 <!-- 🎄 Otsikko 3 -->
 <div class="thumb-title">Päähärpäkkeet</div>
 <div class="thumb"><img src="https://i.postimg.cc/rmvCSkfy/karkkisarvet.png" alt="Koriste" /></div>
@@ -679,7 +615,6 @@ window.bgBitmap = bgBitmap;
 <div class="thumb"><img src="https://i.postimg.cc/CxxHXVjR/Chat-GPT-Image-12-marrask-2025-klo-18-47-55.png" alt="Koriste" /></div>
 <div class="thumb"><img src="https://i.postimg.cc/bJgf0Njn/lasit.png" alt="Lasit" /></div>
 <div class="thumb"><img src="https://i.postimg.cc/pV4ws1Gh/Sarvetkoristeilla.png" alt="Koriste sarvet"></div>
-
 
 <!-- 🎄 Otsikko -->
 <div class="thumb-title">Herkut</div>
@@ -697,8 +632,6 @@ window.bgBitmap = bgBitmap;
 <div class="thumb"><img src="https://i.postimg.cc/bNs69fSK/tonttu.png" alt="Koriste" /></div>
 <div class="thumb"><img src="https://i.postimg.cc/RZCt3G7P/tonttu-(1).png" alt="Koriste tonttu"></div>
 
-
-
 <!-- 🎄 Otsikko -->
 <div class="thumb-title">Naughty or Nice</div>
 <div class="thumb"><img src="https://i.postimg.cc/m28YZC7Y/naughtyleima.png" alt="Koriste" /></div>
@@ -706,7 +639,6 @@ window.bgBitmap = bgBitmap;
 <div class="thumb"><img src="https://i.postimg.cc/FRcGCzdf/hohoho.png" alt="Koriste" /></div>
 <div class="thumb"><img src="https://i.postimg.cc/NfT3WGXC/lappunen.png" alt="Koriste" /></div>
 <div class="thumb"><img src="https://i.postimg.cc/J4KXC2gV/Kiss-Me.png" alt="Koriste" /></div>
-
 
 <!-- 🎄 Otsikko -->
 <div class="thumb-title">Koristeet</div>
@@ -716,7 +648,6 @@ window.bgBitmap = bgBitmap;
 <div class="thumb"><img src="https://i.postimg.cc/QMW61Lj9/test-transparent.png" alt="Koriste" /></div>
 <div class="thumb"><img src="https://i.postimg.cc/nLBBmwHG/ce2f1ccf372f3d66c788dbac18029180.png" alt="Koriste" /></div>
 
-
 <!-- 🎄 Otsikko 2 -->
 <div class="thumb-title">Kehykset</div>
 <div class="thumb"><img src="https://i.postimg.cc/cCqzmzYy/153d3702402e3c4ceec9f7edd176fcb9.png" alt="Koriste" /></div>
@@ -724,18 +655,6 @@ window.bgBitmap = bgBitmap;
 <div class="thumb"><img src="https://i.postimg.cc/DZZLt0NK/kehys-(1).png" alt="Koriste kehys"></div>
 <div class="thumb"><img src="https://i.postimg.cc/4y1Cf2nD/candykehys.png" alt="Koriste" /></div>
 <div class="thumb"><img src="https://i.postimg.cc/BbmyJjSV/lahjat-(2).png" alt="Koriste lahjat"></div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 </div> <!-- /#thumbs -->
 
@@ -750,7 +669,7 @@ window.bgBitmap = bgBitmap;
 5. Kopioi “Direct link” (https://i.postimg.cc/…png).
 6. Lisää rivi:
    <div class="thumb"><img src="LINKKI" alt="Koriste X"></div> <!-- kuva X -->
-
+-->
 
 <footer class="credits">
   🎄 Iloista joulumieltä toivottaa <strong>Kiia</strong> ✨
@@ -770,6 +689,3 @@ window.bgBitmap = bgBitmap;
 
 </body>
 </html>
-
-
-
