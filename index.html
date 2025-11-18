@@ -120,7 +120,12 @@ canvas{width:100%; height:100%; display:block; background:#222}
 .thumb img{ max-width:100%; max-height:100%; display:block; cursor:pointer; user-select:none; -webkit-user-drag:none; }
 
 /* Otsikot omille riveilleen ruudukossa */
-.thumb-title { grid-column: 1 / -1; }
+.thumb-title {
+  grid-column: 1 / -1;
+  font-weight: 700;
+  color: #ffeabf; /* kevyt, hillitty kellertävä */
+}
+
 
 /* -------------------- Poistoruksi (x), näkyy aktiivisessa -------------------- */
 .remove-btn{
@@ -676,7 +681,7 @@ updateScrollMode();
 5. Kopioi “Direct link” (https://i.postimg.cc/…png).
 6. Lisää rivi:
    <div class="thumb"><img src="LINKKI" alt="Koriste X"></div> <!-- kuva X -->
--->
+
 
 <footer class="credits" style="font-family:'Emilys Candy', cursive;">🎄 Tonttuilun iloa ja joulumieltä! – <strong>Kiia</strong> ✨</footer>
 
@@ -696,6 +701,7 @@ updateScrollMode();
 
 </body>
 </html>
+
 
 
 
