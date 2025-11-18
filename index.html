@@ -99,10 +99,10 @@ input[type=file]{display:none}
 
 /* -------------------- Esikatselualue / Canvas-kehys -------------------- */
 .preview{
-  width:100%; aspect-ratio:1/1; background:#2b1a17; border-radius:16px; border:3px solid var(--gold);
+  width:100%; aspect-ratio:1/1; background:##3a1f1a; border-radius:16px; border:3px solid var(--gold);
   overflow:hidden; position:relative; margin:0 auto 10px; touch-action:none;
 }
-canvas{width:100%; height:100%; display:block; background:#2b1a17}
+canvas{width:100%; height:100%; display:block; background:##3a1f1a}
 
 /* -------------------- Pieni ohjeteksti -------------------- */
 .note{ text-align:left; color:#ffe7a5; font-size:13px; margin:8px 0 12px; line-height:1.35; }
@@ -275,7 +275,7 @@ canvas{width:100%; height:100%; display:block; background:#2b1a17}
   /* -------------------- Piirron apufunktiot -------------------- */
   function clearCanvas(target){
     const t = target||ctx;
-    t.fillStyle = '#2b1a17';
+    t.fillStyle = '#3a1f1a';
     t.fillRect(0,0,canvas.width,canvas.height);
   }
   function hardResetPointers(){
@@ -329,7 +329,7 @@ canvas{width:100%; height:100%; display:block; background:#2b1a17}
 
   /* -------------------- Varsinainen renderöinti -------------------- */
   function renderTo(targetCtx){
-    targetCtx.fillStyle='#2b1a17'; targetCtx.fillRect(0,0,canvas.width,canvas.height);
+    targetCtx.fillStyle='#3a1f1a'; targetCtx.fillRect(0,0,canvas.width,canvas.height);
     if(bgBitmap){
       targetCtx.save();
       targetCtx.imageSmoothingEnabled=true; targetCtx.imageSmoothingQuality='high';
@@ -703,6 +703,7 @@ updateScrollMode();
 
 </body>
 </html>
+
 
 
 
