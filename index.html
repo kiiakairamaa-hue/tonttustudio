@@ -126,11 +126,18 @@ canvas{width:100%; height:100%; display:block; background:##3a1f1a}
 .thumb img{ max-width:100%; max-height:100%; display:block; cursor:pointer; user-select:none; -webkit-user-drag:none; }
 
 /* Otsikot omille riveilleen ruudukossa */
+/* 📌 Kirjaston otsikot – hieman ohuemmat ja elegantimmat */
 .thumb-title {
-  grid-column: 1 / -1;
-  font-weight: 700;
-  color: #ffeabf; /* kevyt, hillitty kellertävä */
+  font-family: 'Fredoka', sans-serif;
+  font-size: 17px;
+  font-weight: 500;          /* ← aiemmin 700 → nyt paljon siistimpi */
+  color: #f6d778;            /* hentoa kultaa */
+  text-align: center;
+  margin: 6px 0 2px;
+  opacity: 0.92;             /* kevyesti pehmeä */
+  letter-spacing: 0.4px;     /* ilmavuutta */
 }
+
 
 
 /* -------------------- Poistoruksi (x), näkyy aktiivisessa -------------------- */
@@ -705,6 +712,7 @@ updateScrollMode();
 
 </body>
 </html>
+
 
 
 
