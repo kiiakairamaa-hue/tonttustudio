@@ -294,44 +294,32 @@ let stickerGesture = null;      // monisormen ele tarralle
     if(bg) bg._pinch = null;
   }
 
-  function resetAll(){
-    // Poistetaan taustakuva ja nollataan transformaatio
-    bgBitmap = null;
-    bg = { x:0, y:0, scale:1 };
-    bgLocked = false;
+ function resetAll(){
+  // Poistetaan taustakuva ja nollataan transformaatio
+  bgBitmap = null;
+  window.bgBitmap = null; // tärkeä scroll-mode logiikalle
 
-    // Poistetaan kaikki koristeet
-    stickers = [];
-    activeIndex = -1;
-    saveCount = 1;
+  bg = { x:0, y:0, scale:1 };
+  bgLocked = false;
 
-    // Tyhjennetään canvas ja tilat
-    clearCanvas(ctx);
-    clearCanvas(bctx);
-    hardResetPointers();
-    needsRedraw = true;
+  // Poistetaan kaikki koristeet
+  stickers = [];
+  activeIndex = -1;
+  saveCount = 1;
 
-    // Piilotetaan poistopainike
-    delBtn.style.display = 'none';
+  // Tyhjennetään canvas ja tilat
+  clearCanvas(ctx);
+  clearCanvas(bctx);
+  hardResetPointers();
+  needsRedraw = true;
 
-    // Päivitetään scroll-tila: ei taustaa → saa scrollata
-    updateScrollMode();
-  }
-function updateScrollMode() {
-    const previewEl = document.querySelector('.preview');
-    if (!previewEl) return;
+  // Piilotetaan poistopainike
+  delBtn.style.display = 'none';
 
-    // Jos taustakuva on olemassa → estetään scrollaus esikatselussa
-    if (bgBitmap) {
-      previewEl.classList.remove('scroll-mode');
-    } 
-    // Jos taustakuvaa ei ole → sallitaan scrollaus mustan ruudun päältä
-    else {
-      previewEl.classList.add('scroll-mode');
-    }
-  }
+  // Päivitetään scroll-tila: ei taustaa → saa scrollata
+  updateScrollMode();
+}
 
- 
 
   /* -------------------- KUVAN DEKoodaus ja skaalaus -------------------- */
   async function decodeSmart(f){
@@ -766,6 +754,7 @@ file.addEventListener('change', async (e)=>{
 
 </body>
 </html>
+
 
 
 
