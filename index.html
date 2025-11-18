@@ -432,41 +432,70 @@ h1 {
     delBtn.style.top  = (py - pr.top  - 6) + 'px';
   }
 
- /* -------------------- Tiedoston avaus + LATAAN… -------------------- */
+/* -------------------- Tiedoston avaus + LATAAN… -------------------- */
 file.addEventListener('change', async (e)=>{
-  const f = e.target.files && e.target.files[0]; if(!f) return;
+  const f = e.target.files && e.target.files[0]; 
+  if(!f) return;
+
   const label = document.querySelector('label[for="file"]');
   const originalText = label.textContent;
-  label.textContent = "LATAAN..."; label.style.opacity = "0.6"; label.style.pointerEvents = "none";
-  try{
-    const isHeic=(/\.hei[cf]$/i.test(f.name||'')||/heic|heif/i.test(f.type||''));
-    if(isHeic && window.heic2any){
-      const pngBlob=await window.heic2any({blob:f,toType:'image/png'});
-      const url=URL.createObjectURL(pngBlob);
-      const img=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=url;});
+
+  label.textContent = "LATAAN...";
+  label.style.opacity = "0.6";
+  label.style.pointerEvents = "none";
+
+  try {
+    const isHeic = (/\.hei[cf]$/i.test(f.name||'') || /heic|heif/i.test(f.type||''));
+
+    if (isHeic && window.heic2any) {
+      const pngBlob = await window.heic2any({ blob: f, toType: 'image/png' });
+      const url = URL.createObjectURL(pngBlob);
+
+      const img = await new Promise((res, rej)=>{
+        const im = new Image();
+        im.onload = ()=>res(im);
+        im.onerror = rej;
+        im.src = url;
+      });
+
       URL.revokeObjectURL(url);
-      const off=document.createElement('canvas'); off.width=img.naturalWidth; off.height=img.naturalHeight;
-      const g=off.getContext('2d'); g.imageSmoothingEnabled=true; g.imageSmoothingQuality='high'; g.drawImage(img,0,0);
-      bgBitmap=downscaleToMaxEdge(off);
-    }else{
-      const bmp=await decodeSmart(f); bgBitmap=downscaleToMaxEdge(bmp);
-      if(bmp && bmp.close) try{ bmp.close(); }catch(_){}
+
+      const off = document.createElement('canvas');
+      off.width = img.naturalWidth;
+      off.height = img.naturalHeight;
+
+      const g = off.getContext('2d');
+      g.imageSmoothingEnabled = true;
+      g.imageSmoothingQuality = 'high';
+      g.drawImage(img, 0, 0);
+
+      bgBitmap = downscaleToMaxEdge(off);
+
+    } else {
+      const bmp = await decodeSmart(f);
+      bgBitmap = downscaleToMaxEdge(bmp);
+      if (bmp && bmp.close) try { bmp.close(); } catch(_){}
     }
 
-    fitContain(); 
-    clampBgScale(); 
-    needsRedraw=true;
+    /* 🔥 TÄRKEÄ: viedään globaaliin, jotta scroll-mode toimii oikein */
+    window.bgBitmap = bgBitmap;
 
-    updateScrollMode();   // ← TÄMÄ ON LISÄTTY
+    fitContain();
+    clampBgScale();
+    needsRedraw = true;
 
-  }catch{ 
-    alert('Kuvan avaaminen epäonnistui.'); 
+    /* 🔥 Päivitä scroll-mode vasta, kun bgBitmap on oikeasti asetettu */
+    updateScrollMode();
+
+  } catch {
+    alert('Kuvan avaaminen epäonnistui.');
   }
-  finally{
-    e.target.value=''; 
-    label.textContent=originalText; 
-    label.style.opacity='1'; 
-    label.style.pointerEvents='auto';
+
+  finally {
+    e.target.value = '';
+    label.textContent = originalText;
+    label.style.opacity = '1';
+    label.style.pointerEvents = 'auto';
   }
 });
 
@@ -740,6 +769,7 @@ function updateScrollMode() {
 
 </body>
 </html>
+
 
 
 
