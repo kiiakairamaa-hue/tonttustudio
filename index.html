@@ -292,11 +292,10 @@ h1 {
     if(bg) bg._pinch = null;
   }
 
-  function resetAll(){
+ function resetAll(){
     bgBitmap = null;
-    window.bgBitmap = null;   // 🔥 TÄRKEÄ: scroll toimii myös tyhjennyksen jälkeen
-
-    bg = { x:0, y:0, scale:1 };
+    window.bgBitmap = null;   // 🔥 tärkein korjaus
+    bg = {x:0, y:0, scale:1};
     bgLocked = false;
 
     stickers = [];
@@ -307,11 +306,13 @@ h1 {
     clearCanvas(bctx);
     hardResetPointers();
     needsRedraw = true;
-
     delBtn.style.display = 'none';
 
-    updateScrollMode();
-  }
+    // 🔥 scroll-mode pois päältä tyhjennyksen jälkeen
+    const preview = document.querySelector('.preview');
+    if (preview) preview.classList.remove("scroll-mode");
+}
+
  
 
   /* -------------------- KUVAN DEKoodaus ja skaalaus -------------------- */
@@ -769,6 +770,7 @@ function updateScrollMode() {
 
 </body>
 </html>
+
 
 
 
