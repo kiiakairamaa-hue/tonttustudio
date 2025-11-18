@@ -27,23 +27,25 @@
 
 <style>
 
-/* --- Allekirjoitus / Credits sivun oikeassa alakulmassa --- */
+/* --- Allekirjoitus / Credits --- */
 .credits {
   width: 100%;
-  text-align: center;        /* ← keskitetty */
+  text-align: center;
   font-size: 17px;
   color: #ffe7a5;
   opacity: 0.95;
-  margin-top: 80px;          /* ← hiukan alemmas */
-  padding: 0 0 20px 0;       /* ← tasaiset reunat */
-  font-family: "Fredoka", sans-serif;  /* ← sama fontti kuin muualla */
+  margin-top: 80px;
+  padding: 0 0 20px 0;
+  font-family: "Fredoka", sans-serif;
   text-shadow: 0 1px 3px rgba(0,0,0,0.6);
   box-sizing: border-box;
+  line-height: 1.25; /* kaunis riviväli */
 }
 
-.credits strong {
-  color: var(--gold);
-  font-weight: 700;
+.credits-name {
+  font-size: 14px;
+  opacity: 0.75;
+  margin-top: 4px;
 }
 
 /* -------------------- Värit ja perusfontit -------------------- */
@@ -79,9 +81,12 @@ h1 {
 
 /* 🧝‍♂️ Tonttu otsikon vasemmalla – kokoa säädetään vain täällä */
 .title-tonttu {
-  height: 70px;     /* ← muuta tätä kun haluat isommaksi/pienemmäksi */
+  height: 70px;
   display: block;
+  align-self: flex-end;   /* ← asettaa tontun otsikkotekstin alapalkin tasolle */
+  margin-bottom: 4px;     /* ← hienosäätö, voit säätää 0–8px */
 }
+
 
 /* -------------------- Työkalupalkki ja napit -------------------- */
 .toolbar{
@@ -691,16 +696,16 @@ updateScrollMode();
 
 <footer class="credits">
   🎄 Tonttuilun iloa ja joulumieltä! ✨
-  <div style="font-size:14px; opacity:0.75; margin-top:4px;">
-    – Kiia
-  </div>
+  <div class="credits-name">– Kiia</div>
 </footer>
+
 
 
 </div> <!-- /.wrap -->
 
 </body>
 </html>
+
 
 
 
