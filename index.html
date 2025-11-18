@@ -213,9 +213,10 @@ h1 {
   <!-- =====================================================
        🖼️ ESIKATSELUALUE / CANVAS
        ----------------------------------------------------- -->
-  <div class="preview" id="preview">
+<div class="preview" id="preview" style="touch-action: pan-y;">
     <canvas id="c" width="1200" height="1200" aria-label="Esikatselu"></canvas>
-  </div>
+</div>
+
 
   <!-- =====================================================
        📋 OHJE / NOTE
@@ -280,16 +281,39 @@ h1 {
   /* -------------------- Piirtosilmukka -------------------- */
   requestAnimationFrame(function loop(){ if(needsRedraw){ draw(); needsRedraw=false; } requestAnimationFrame(loop); });
 
-  /* -------------------- Piirron apufunktiot -------------------- */
-  function clearCanvas(target){ const t = target||ctx; t.fillStyle = '#000'; t.fillRect(0,0,canvas.width,canvas.height); }
-  function hardResetPointers(){ pointers.clear(); draggingBG=false; stickerGesture=null; if(bg) bg._pinch=null; }
-  function resetAll(){
-    bgBitmap=null; bg={x:0,y:0,scale:1}; bgLocked=false;
-    stickers=[]; activeIndex=-1; saveCount=1;
-    clearCanvas(ctx); clearCanvas(bctx); hardResetPointers(); needsRedraw=true;
-    delBtn.style.display='none';
-       updateScrollMode();
+   /* -------------------- Piirron apufunktiot -------------------- */
+  function clearCanvas(target){
+    const t = target||ctx;
+    t.fillStyle = '#000';
+    t.fillRect(0,0,canvas.width,canvas.height);
+  }
 
+  function hardResetPointers(){
+    pointers.clear();
+    draggingBG = false;
+    stickerGesture = null;
+    if(bg) bg._pinch = null;
+  }
+
+  function resetAll(){
+    bgBitmap = null;
+    window.bgBitmap = null;   // 🔥 TÄRKEÄ: scroll toimii myös tyhjennyksen jälkeen
+
+    bg = { x:0, y:0, scale:1 };
+    bgLocked = false;
+
+    stickers = [];
+    activeIndex = -1;
+    saveCount = 1;
+
+    clearCanvas(ctx);
+    clearCanvas(bctx);
+    hardResetPointers();
+    needsRedraw = true;
+
+    delBtn.style.display = 'none';
+
+    updateScrollMode();
   }
  
 
@@ -579,8 +603,12 @@ function updateScrollMode() {
   // Jos preview ei ole vielä olemassa → älä tee mitään
   if (!preview) return;
 
-  // bgBitmap voi olla paikallinen muuttuja, joten tarkistetaan window.bgBitmap
-  const hasBg = window.bgBitmap !== undefined && window.bgBitmap !== null;
+  // Varmistetaan että window.bgBitmap vastaa todellisuutta
+  if (typeof window.bgBitmap === "undefined") {
+    window.bgBitmap = null;
+  }
+
+  const hasBg = window.bgBitmap !== null;
 
   if (!hasBg) {
     preview.classList.add("scroll-mode");
@@ -715,4 +743,5 @@ function updateScrollMode() {
 
 </body>
 </html>
+
 
