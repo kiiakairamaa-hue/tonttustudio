@@ -246,19 +246,20 @@ h1 {
   const back = document.createElement('canvas'); back.width = canvas.width; back.height = canvas.height;
   const bctx = back.getContext('2d', {alpha:false});
 
-  /* -------------------- Tilamuuttujat -------------------- */
-  let saveCount = 1;
-  let bgBitmap = null;
-  let bg = { x:0, y:0, scale:1 };
-  let bgLocked = false;
+ /* -------------------- Tilamuuttujat -------------------- */
+let saveCount = 1;
+let bgBitmap = null;            // taustakuva canvasille
+let bg = { x:0, y:0, scale:1 }; // taustakuvan sijainti ja skaala
+let bgLocked = false;           // lukitaanko tausta kun tarroja lisätään
 
-  let stickers = [];
-  let activeIndex = -1;
+let stickers = [];              // tarrat
+let activeIndex = -1;           // aktiivisen tarran indeksi
 
-  let needsRedraw = true;
-  let pointers = new Map();
-  let draggingBG = false;
-  let stickerGesture = null;
+let needsRedraw = true;         // piirtoflag
+let pointers = new Map();       // pointer-tapahtumien tietovarasto
+let draggingBG = false;         // raahataanko taustaa
+let stickerGesture = null;      // monisormen ele tarralle
+
 
   /* -------------------- Poistonappi (x) -------------------- */
   const delBtn = document.createElement('div');
@@ -294,20 +295,34 @@ h1 {
   }
 
  function resetAll(){
+    // 🔥 Poistetaan taustakuva
     bgBitmap = null;
-    window.bgBitmap = null;   // 🔥 tärkein korjaus
-    bg = {x:0, y:0, scale:1};
+    window.bgBitmap = null;
+
+    // 🔥 Nollataan taustakuvan transformaatio
+    bg = { x:0, y:0, scale:1 };
     bgLocked = false;
 
+    // 🔥 Poistetaan kaikki koristeet
     stickers = [];
     activeIndex = -1;
     saveCount = 1;
 
+    // 🔥 Tyhjennä canvas ja tilamuuttujat
     clearCanvas(ctx);
     clearCanvas(bctx);
     hardResetPointers();
     needsRedraw = true;
+
+    // 🔥 Piilota poistopainike
     delBtn.style.display = 'none';
+
+    // 🔥 Tämä on ratkaisevaa:
+    // Kun kuvaa EI ole → preview siirtyy scroll-mode-tilaan
+    const preview = document.querySelector('.preview');
+    if (preview) {
+        preview.classList.add("scroll-mode");
+    }
 
     // 🔥 scroll-mode pois päältä tyhjennyksen jälkeen
     const preview = document.querySelector('.preview');
@@ -765,6 +780,7 @@ function updateScrollMode() {
 
 </body>
 </html>
+
 
 
 
