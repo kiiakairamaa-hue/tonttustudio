@@ -626,16 +626,10 @@ file.addEventListener('change', async (e)=>{
 <script>
 function updateScrollMode() {
   const preview = document.querySelector('.preview');
-
-  // Jos preview ei ole vielä olemassa → älä tee mitään
   if (!preview) return;
 
-  // Varmistetaan että window.bgBitmap vastaa todellisuutta
-  if (typeof window.bgBitmap === "undefined") {
-    window.bgBitmap = null;
-  }
-
-  const hasBg = window.bgBitmap !== null;
+  // 🔥 Käytämme vain oikeaa muuttujaa: bgBitmap
+  const hasBg = (typeof bgBitmap !== "undefined" && bgBitmap !== null);
 
   if (!hasBg) {
     preview.classList.add("scroll-mode");
@@ -643,7 +637,6 @@ function updateScrollMode() {
     preview.classList.remove("scroll-mode");
   }
 }
-</script>
 
 
   <!-- =====================================================
@@ -770,6 +763,7 @@ function updateScrollMode() {
 
 </body>
 </html>
+
 
 
 
