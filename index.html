@@ -294,40 +294,42 @@ let stickerGesture = null;      // monisormen ele tarralle
     if(bg) bg._pinch = null;
   }
 
- function resetAll(){
-    // 🔥 Poistetaan taustakuva
+  function resetAll(){
+    // Poistetaan taustakuva ja nollataan transformaatio
     bgBitmap = null;
-    window.bgBitmap = null;
-
-    // 🔥 Nollataan taustakuvan transformaatio
     bg = { x:0, y:0, scale:1 };
     bgLocked = false;
 
-    // 🔥 Poistetaan kaikki koristeet
+    // Poistetaan kaikki koristeet
     stickers = [];
     activeIndex = -1;
     saveCount = 1;
 
-    // 🔥 Tyhjennä canvas ja tilamuuttujat
+    // Tyhjennetään canvas ja tilat
     clearCanvas(ctx);
     clearCanvas(bctx);
     hardResetPointers();
     needsRedraw = true;
 
-    // 🔥 Piilota poistopainike
+    // Piilotetaan poistopainike
     delBtn.style.display = 'none';
 
-    // 🔥 Tämä on ratkaisevaa:
-    // Kun kuvaa EI ole → preview siirtyy scroll-mode-tilaan
-    const preview = document.querySelector('.preview');
-    if (preview) {
-        preview.classList.add("scroll-mode");
-    }
+    // Päivitetään scroll-tila: ei taustaa → saa scrollata
+    updateScrollMode();
+  }
+function updateScrollMode() {
+    const previewEl = document.querySelector('.preview');
+    if (!previewEl) return;
 
-    // 🔥 scroll-mode pois päältä tyhjennyksen jälkeen
-    const preview = document.querySelector('.preview');
-    if (preview) preview.classList.remove("scroll-mode");
-}
+    // Jos taustakuva on olemassa → estetään scrollaus esikatselussa
+    if (bgBitmap) {
+      previewEl.classList.remove('scroll-mode');
+    } 
+    // Jos taustakuvaa ei ole → sallitaan scrollaus mustan ruudun päältä
+    else {
+      previewEl.classList.add('scroll-mode');
+    }
+  }
 
  
 
@@ -494,8 +496,6 @@ file.addEventListener('change', async (e)=>{
       if (bmp && bmp.close) try { bmp.close(); } catch(_){}
     }
 
-    /* 🔥 TÄRKEÄ: viedään globaaliin, jotta scroll-mode toimii oikein */
-    window.bgBitmap = bgBitmap;
 
     fitContain();
     clampBgScale();
@@ -640,20 +640,6 @@ file.addEventListener('change', async (e)=>{
 </script>
 
 <script>
-function updateScrollMode() {
-  const preview = document.querySelector('.preview');
-  if (!preview) return;
-
-  // 🔥 Käytämme vain oikeaa muuttujaa: bgBitmap
-  const hasBg = (typeof bgBitmap !== "undefined" && bgBitmap !== null);
-
-  if (!hasBg) {
-    preview.classList.add("scroll-mode");
-  } else {
-    preview.classList.remove("scroll-mode");
-  }
-}
-</script>
 
 
   <!-- =====================================================
@@ -780,6 +766,7 @@ function updateScrollMode() {
 
 </body>
 </html>
+
 
 
 
