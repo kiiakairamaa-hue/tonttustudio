@@ -575,13 +575,21 @@ file.addEventListener('change', async (e)=>{
 <script>
 function updateScrollMode() {
   const preview = document.querySelector('.preview');
-  if (!bgBitmap) {
+
+  // Jos preview ei ole vielä olemassa → älä tee mitään
+  if (!preview) return;
+
+  // bgBitmap voi olla paikallinen muuttuja, joten tarkistetaan window.bgBitmap
+  const hasBg = window.bgBitmap !== undefined && window.bgBitmap !== null;
+
+  if (!hasBg) {
     preview.classList.add("scroll-mode");
   } else {
     preview.classList.remove("scroll-mode");
   }
 }
 </script>
+
 
   <!-- =====================================================
        📦 KIRJASTO (PIKKUKUVAT)
@@ -707,3 +715,4 @@ function updateScrollMode() {
 
 </body>
 </html>
+
