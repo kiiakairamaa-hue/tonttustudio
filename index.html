@@ -154,14 +154,16 @@ function updateScrollMode() {
   const previewEl = document.querySelector('.preview');
   if (!previewEl) return;
 
-  // Jos tausta on olemassa → ei skrollia
-  if (bgBitmap) {
-    previewEl.classList.remove('scroll-mode');
+  // Käytetään vain yhtä oikeaa globaalia muuttujaa
+  const hasBg = (window.bgBitmap !== null && window.bgBitmap !== undefined);
+
+  if (hasBg) {
+    previewEl.classList.remove('scroll-mode');   // kuva → ei scrollia
   } else {
-    // Ei taustaa → musta ruutu skrollaa
-    previewEl.classList.add('scroll-mode');
+    previewEl.classList.add('scroll-mode');      // ei kuvaa → scroll
   }
 }
+
 </script>
 
 
@@ -491,6 +493,7 @@ file.addEventListener('change', async (e)=>{
       g.drawImage(img, 0, 0);
 
       bgBitmap = downscaleToMaxEdge(off);
+window.bgBitmap = bgBitmap;
 
     } else {
       const bmp = await decodeSmart(f);
@@ -766,3 +769,4 @@ file.addEventListener('change', async (e)=>{
 
 </body>
 </html>
+
