@@ -133,7 +133,11 @@ input[type=file]{display:none}
   border-radius:16px;
   border:3px solid var(--gold);
   overflow:hidden;
-  position:relative;
+
+  position: sticky;                  /* ← tästä sticky */
+  top: 12px;                         /* ← kaunis marginaali yläreunaan */
+  z-index: 50;                       /* ← pitää esikatselun kaiken muun edessä */
+
   margin:0 auto 10px;
   touch-action:none;
 }
@@ -854,6 +858,7 @@ updateScrollMode();
 
 </body>
 </html>
+
 
 
 
