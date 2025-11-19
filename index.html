@@ -71,7 +71,16 @@ body{
 
 /* -------------------- Otsikko (h1) + tonttu -------------------- */
 h1 {
-  margin: 8px 0 12px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+
+  margin: 0;
+  padding: 10px 0 8px;
+
+  background: var(--red);
+  border-bottom: 2px solid rgba(255,215,0,0.25);
+
   font-size: 42px;
   line-height: 1.05;
   color: #ffd700;
@@ -81,20 +90,21 @@ h1 {
   letter-spacing: .3px;
 
   display: flex;
-  align-items: flex-end;   /* ⬅️ tärkein muutos: tasaa alareunat */
+  align-items: flex-end;     /* alareunat tasan */
   justify-content: center;
-  gap: 8px;                /* ⬅️ pienempi väli */
+  gap: 6px;                  /* lähempänä tekstiä */
 }
 
 
 /* 🧝‍♂️ Tonttu otsikon vasemmalla – koko ja tasaus */
 .title-tonttu {
-  height: 62px;
+  height: 60px;
   display: block;
-  align-self: flex-end;  /* ⬅️ seuraa tekstin alalinjaa */
-  margin-bottom: -2px;   /* ⬅️ pieni hienosäätö (nostaa vähän) */
-  margin-right: 0px;     /* ⬅️ tonttu hieman lähemmäs tekstiä */
+  align-self: flex-end;
+  margin-bottom: -1px;       /* tarkka hienosäätö */
+  margin-right: 2px;         /* hieman lähemmäs tekstiä */
 }
+
 
 /* -------------------- Työkalupalkki ja napit -------------------- */
 .toolbar{
@@ -865,6 +875,7 @@ updateScrollMode();
 
 </body>
 </html>
+
 
 
 
