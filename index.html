@@ -80,19 +80,19 @@ h1 {
   letter-spacing: .3px;
 
   display: flex;
-  align-items: flex-start;   /* tonttu ja teksti ylemmäs */
+  align-items: flex-end;   /* ⬅️ tärkein muutos: tasaa alareunat */
   justify-content: center;
-  gap: 12px;
+  gap: 8px;                /* ⬅️ pienempi väli */
 }
+
 
 /* 🧝‍♂️ Tonttu otsikon vasemmalla – koko ja tasaus */
 .title-tonttu {
-  height: 60px;           /* hieman pienempi ja kauniimpi */
+  height: 62px;
   display: block;
-  align-self: flex-start; /* seuraa otsikon ylälinjaa */
-  margin-top: 6px;
-  margin-bottom: 10;
-  margin-right: 2px;
+  align-self: flex-end;  /* ⬅️ seuraa tekstin alalinjaa */
+  margin-bottom: -2px;   /* ⬅️ pieni hienosäätö (nostaa vähän) */
+  margin-right: 4px;     /* ⬅️ tonttu hieman lähemmäs tekstiä */
 }
 
 /* -------------------- Työkalupalkki ja napit -------------------- */
@@ -854,4 +854,5 @@ updateScrollMode();
 
 </body>
 </html>
+
 
