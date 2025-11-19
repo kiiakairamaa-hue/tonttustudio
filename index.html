@@ -164,14 +164,18 @@ input[type=file]{display:none}
   overflow: hidden;
 
   position: sticky;
-  top: 78px;   /* ⬅️ korjattu arvo */
+  top: 78px;     /* ⬅️ pitää esikatselun juuri otsikon alapuolella */
   z-index: 50;
 
   touch-action: none;
 
   box-shadow: 0 18px 40px rgba(0,0,0,0.7);
-  transform: scale(0.95);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  /* 🔥 SYY ONGELMAAN: POISTETTU */
+  /* transform: scale(0.95); */
+
+  /* voit pitää transitionin mutta se ei tee mitään nyt */
+  transition: box-shadow 0.25s ease;
 }
 
 canvas{
@@ -891,6 +895,7 @@ updateScrollMode();
 
 </body>
 </html>
+
 
 
 
