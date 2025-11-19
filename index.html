@@ -80,33 +80,30 @@ h1 {
   top: 0;
   z-index: 200;
 
-  /* 🔥 estää nytkähdyksen ja siirtymisen */
+  /* ei hyppää, ei siirry */
   margin: 0;
   margin-bottom: -2px;
 
-  /* 🔥 tasainen padding = ei pomppimista */
-  padding: 10px 0 6px;
+  /* korjatut paddingit → ei vilkahdusta, ei hyppyä */
+  padding-top: 6px;
+  padding-bottom: 14px;
 
-  background: var(--red);  /* 🔥 estää vilkahduksen otsikon takaa */
+  background: var(--red);  /* peittää kaiken taustan otsikon takaa */
 
-  /* --- tonttu + teksti --- */
+  /* tonttu + teksti */
   display: flex;
-  align-items: flex-end;   /* tasaa alareunan */
+  align-items: flex-end;   /* alareunat tasan */
   justify-content: center;
   gap: 8px;
 
-     font-size: 42px;
+  /* typografia */
+  font-size: 42px;
   line-height: 1.05;
   color: #ffd700;
   text-shadow: 0 2px 0 rgba(0,0,0,.25), 0 0 16px rgba(243,209,119,.35);
   font-weight: 700;
   font-family: 'Emilys Candy', cursive;
   letter-spacing: .3px;
-
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 6px;
 }
 
 /* 🧝‍♂️ tontun säätö */
@@ -117,7 +114,6 @@ h1 {
   margin-bottom: -1px;
   margin-right: 2px;
 }
-
 
 /* -------------------- Työkalupalkki ja napit -------------------- */
 .toolbar{
@@ -890,4 +886,5 @@ updateScrollMode();
 
 </body>
 </html>
+
 
