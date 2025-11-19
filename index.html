@@ -80,11 +80,21 @@ h1 {
   top: 0;
   z-index: 200;
 
+  /* 🔥 estää nytkähdyksen ja siirtymisen */
   margin: 0;
-  padding: 12px 0 14px;   /* ⬅️ TÄRKEÄ: lisää tilaa alle */
+  margin-bottom: -2px;
 
-  background: var(--red);
+  /* 🔥 tasainen padding = ei pomppimista */
+  padding: 10px 0 6px;
 
+  background: var(--red);  /* 🔥 estää vilkahduksen otsikon takaa */
+
+  /* --- tonttu + teksti --- */
+  display: flex;
+  align-items: flex-end;   /* tasaa alareunan */
+  justify-content: center;
+  gap: 8px;
+}
 
   font-size: 42px;
   line-height: 1.05;
@@ -881,6 +891,7 @@ updateScrollMode();
 
 </body>
 </html>
+
 
 
 
