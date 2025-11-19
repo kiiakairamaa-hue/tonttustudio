@@ -69,14 +69,14 @@ body{
   position: relative;   /* ← tämä sallii stickyn toimia sisällä */
 }
 
-/* -------------------- Otsikko (h1) + tonttu -------------------- */
+/* -------------------- Sticky-otsikko (fixattu) -------------------- */
 h1 {
   position: sticky;
   top: 0;
   z-index: 200;
 
   margin: 0;
-  padding: 10px 0 8px;
+  padding: 12px 0 14px;   /* ⬅️ TÄRKEÄ: lisää tilaa alle */
 
   background: var(--red);
   border-bottom: 2px solid rgba(255,215,0,0.25);
@@ -84,25 +84,24 @@ h1 {
   font-size: 42px;
   line-height: 1.05;
   color: #ffd700;
-  text-shadow: 0 2px 0 rgba(0, 0, 0, .25), 0 0 16px rgba(243, 209, 119, .35);
+  text-shadow: 0 2px 0 rgba(0,0,0,.25), 0 0 16px rgba(243,209,119,.35);
   font-weight: 700;
   font-family: 'Emilys Candy', cursive;
   letter-spacing: .3px;
 
   display: flex;
-  align-items: flex-end;     /* alareunat tasan */
+  align-items: flex-end;
   justify-content: center;
-  gap: 6px;                  /* lähempänä tekstiä */
+  gap: 6px;
 }
 
-
-/* 🧝‍♂️ Tonttu otsikon vasemmalla – koko ja tasaus */
+/* 🧝‍♂️ tontun säätö */
 .title-tonttu {
   height: 60px;
   display: block;
   align-self: flex-end;
-  margin-bottom: -1px;       /* tarkka hienosäätö */
-  margin-right: 2px;         /* hieman lähemmäs tekstiä */
+  margin-bottom: -1px;
+  margin-right: 2px;
 }
 
 
@@ -147,7 +146,7 @@ input[type=file]{display:none}
   overflow:hidden;
 
   position: sticky;
-  top: 8px;                          /* vähän lähempänä yläreunaa */
+  top: 80px;                          /* vähän lähempänä yläreunaa */
   z-index: 50;
 
   margin:0 auto 18px;
@@ -875,6 +874,7 @@ updateScrollMode();
 
 </body>
 </html>
+
 
 
 
