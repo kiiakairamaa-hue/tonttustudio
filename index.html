@@ -311,6 +311,7 @@ input[type=file]{display:none}
   const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
   const preview = document.getElementById('preview');
   clearCanvas(ctx);
+     const previewHint = document.querySelector('.preview-hint');
 
   /* -------------------- Taustapuskuri (back buffer) -------------------- */
   const back = document.createElement('canvas');
@@ -875,4 +876,5 @@ updateScrollMode();
 
 </body>
 </html>
+
 
