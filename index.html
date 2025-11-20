@@ -22,7 +22,7 @@
      🎨 TYYLIT / CSS
      --------------------------------------------------------- -->
 <style>
-html, body {
+     html, body {
   margin: 0;
   padding: 0;
 }
@@ -74,14 +74,17 @@ body{
   position: relative;   /* ← tämä sallii stickyn toimia sisällä */
 }
 
-/* -------------------- Sticky-otsikko (korjattu) -------------------- */
+/* -------------------- Sticky-otsikko (fixattu) -------------------- */
 h1 {
   position: sticky;
   top: 0;
   z-index: 200;
 
   margin: 0;
-  padding: 10px 0 10px;  /* tasainen → ei hyppyä */
+  margin-bottom: -2px;
+
+  /* yläreuna pienempi, ala suurempi → ei hyppyä */
+  padding: 6px 0 12px;
 
   background: var(--red);
 
@@ -93,9 +96,8 @@ h1 {
   font-size: 42px;
   line-height: 1.05;
   color: #ffd700;
-  text-shadow: 
-    0 2px 0 rgba(0,0,0,.25),
-    0 0 16px rgba(243,209,119,.35);
+  text-shadow: 0 2px 0 rgba(0,0,0,.25), 
+               0 0 16px rgba(243,209,119,.35);
   font-weight: 700;
   font-family: 'Emilys Candy', cursive;
   letter-spacing: .3px;
@@ -106,7 +108,7 @@ h1 {
   height: 60px;
   display: block;
   align-self: flex-end;
-  margin-bottom: -2px;
+  margin-bottom: -1px;
   margin-right: 2px;
 }
 
@@ -154,7 +156,7 @@ input[type=file]{display:none}
   overflow: hidden;
 
   position: sticky;
-  top: 66px;
+  top: 78px;   /* ⬅️ korjattu arvo */
   z-index: 50;
 
   touch-action: none;
@@ -163,6 +165,29 @@ input[type=file]{display:none}
   transform: scale(0.95);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+
+/* 📌 Ohjeteksti esikatselun keskelle */
+.preview-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #f6d778;
+  font-size: 18px;
+  font-family: 'Fredoka', sans-serif;
+  opacity: 0.85;
+  pointer-events: none;
+  text-align: center;
+  padding: 4px 8px;
+}
+
+canvas{
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #121212;
+}
+
 
 /* -------------------- Pieni ohjeteksti -------------------- */
 .note{
@@ -277,8 +302,8 @@ input[type=file]{display:none}
      ----------------------------------------------------- -->
 <div class="preview" id="preview">
   <canvas id="c" width="1200" height="1200" aria-label="Esikatselu"></canvas>
+  <div class="preview-hint">✨ Avaa kuva ja sovita se ruutuun</div>
 </div>
-
 
 <!-- =====================================================
      📋 OHJE / NOTE
@@ -303,15 +328,23 @@ input[type=file]{display:none}
   const STICKER_MIN = 0.4, STICKER_MAX = 10.0;
   const BASE_STICKER = 300;
 
-  /* -------------------- DOM-viittaukset -------------------- */
-  const file = document.getElementById('file');
-  const save = document.getElementById('save');
-  const clearBtn = document.getElementById('clear');
-  const canvas = document.getElementById('c');
-  const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
-  const preview = document.getElementById('preview');
-  clearCanvas(ctx);
-     const previewHint = document.querySelector('.preview-hint');
+ /* -------------------- DOM-viittaukset -------------------- */
+const file = document.getElementById('file');
+const save = document.getElementById('save');
+const clearBtn = document.getElementById('clear');
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
+const preview = document.getElementById('preview');
+const previewHint = document.querySelector('.preview-hint');
+clearCanvas(ctx);
+
+/* 📌 Esikatseluun koskemalla avataan kuva, jos taustaa ei ole vielä asetettu */
+preview.addEventListener('click', () => {
+  if (!bgBitmap) {
+    file.click();  // sama kuin “Avaa kuva”
+  }
+});
+
 
   /* -------------------- Taustapuskuri (back buffer) -------------------- */
   const back = document.createElement('canvas');
@@ -385,6 +418,7 @@ input[type=file]{display:none}
     hardResetPointers();
     needsRedraw=true;
     delBtn.style.display='none';
+    if (previewHint) previewHint.style.display = 'block';
     updateScrollMode(); // kun taustakuva poistuu, sallitaan skrollaus jälleen
   }
 
@@ -570,20 +604,21 @@ input[type=file]{display:none}
 
       fitContain();
       clampBgScale();
-      needsRedraw = true;
-bgLocked = false;
+      needsRedraw=true;
 
-      /* Kun taustakuva on asetettu, estetään skrollaus esikatselualueella */
+      if (previewHint) previewHint.style.display = 'none';
+
+      // kun taustakuva on asetettu, estetään skrollaus esikatselualueella
       updateScrollMode();
 
-    } catch {
+    }catch{
       alert('Kuvan avaaminen epäonnistui.');
     }
-    finally {
-      e.target.value = '';
-      label.textContent = originalText;
-      label.style.opacity = '1';
-      label.style.pointerEvents = 'auto';
+    finally{
+      e.target.value='';
+      label.textContent=originalText;
+      label.style.opacity='1';
+      label.style.pointerEvents='auto';
     }
   });
 
@@ -876,5 +911,3 @@ updateScrollMode();
 
 </body>
 </html>
-
-
