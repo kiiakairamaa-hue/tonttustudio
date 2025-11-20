@@ -22,7 +22,7 @@
      🎨 TYYLIT / CSS
      --------------------------------------------------------- -->
 <style>
-     html, body {
+html, body {
   margin: 0;
   padding: 0;
 }
@@ -71,7 +71,7 @@ body{
   max-width:720px;
   margin:0 auto;
   padding:16px;
-  position: relative;   /* ← tämä sallii stickyn toimia sisällä */
+  position: relative;
 }
 
 /* -------------------- Sticky-otsikko (korjattu) -------------------- */
@@ -81,7 +81,7 @@ h1 {
   z-index: 200;
 
   margin: 0;
-  padding: 10px 0 10px;  /* tasainen → ei hyppyä */
+  padding: 10px 0 10px;
 
   background: var(--red);
 
@@ -140,7 +140,6 @@ label.button{
 
 input[type=file]{display:none}
 
-
 /* -------------------- Esikatselualue / Canvas-kehys -------------------- */
 .preview{
   width: calc(100% + 32px);
@@ -188,7 +187,7 @@ input[type=file]{display:none}
   line-height:1.35;
 }
 
-/* -------------------- Pikkukuvien ruudukko (5x5) -------------------- */
+/* -------------------- Pikkukuvien ruudukko -------------------- */
 .thumbs{
   display:grid;
   grid-template-columns:repeat(5,1fr);
@@ -218,7 +217,6 @@ input[type=file]{display:none}
   -webkit-user-drag:none;
 }
 
-/* 📌 Kirjaston otsikot – vasemmalle, omalle rivilleen */
 .thumb-title {
   font-family: 'Fredoka', sans-serif;
   font-size: 17px;
@@ -229,10 +227,10 @@ input[type=file]{display:none}
   margin: 10px 0 4px;
   opacity: 0.92;
   letter-spacing: 0.4px;
-  grid-column: 1 / -1;   /* vie koko rivin leveydeltä */
+  grid-column: 1 / -1;
 }
 
-/* -------------------- Poistoruksi (x), näkyy aktiivisessa -------------------- */
+/* -------------------- Poistoruksi -------------------- */
 .remove-btn{
   position:absolute;
   color:#fff;
@@ -246,28 +244,17 @@ input[type=file]{display:none}
   transform:translate(-50%,-50%);
 }
 
-/* =========================================================
-     🖼️ ESIKATSELUN TAUSTAKUVA / ANIMAATIO-ALUE
-   ========================================================= */
-
-/* Tämä sallii skrollauksen vain silloin kun kuvaa ei ole */
 .preview.scroll-mode {
   touch-action: pan-y;
 }
 </style>
 
-<!-- =========================================================
-     📦 KOLMANNEN OSAPUOLEN KIRJASTO (HEIC → PNG muunnos)
-     --------------------------------------------------------- -->
 <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 </head>
 
 <body>
 <div class="wrap">
 
-<!-- =====================================================
-     🏷️ OTSIKKO – TONTTU VASEMMALLE
-     ----------------------------------------------------- -->
 <h1>
   <img 
     src="https://raw.githubusercontent.com/tonttustudio/tonttustudio/main/Otsikontonttu1.png"
@@ -277,9 +264,6 @@ input[type=file]{display:none}
   TonttuStudio
 </h1>
 
-<!-- =====================================================
-     🧭 TYÖKALUPALKIN PAINIKKEET
-     ----------------------------------------------------- -->
 <div class="toolbar">
   <label for="file" class="button">Avaa kuva</label>
   <input id="file" type="file" accept="image/*,image/heic,image/heif,image/webp"/>
@@ -287,25 +271,15 @@ input[type=file]{display:none}
   <button id="clear">Tyhjennä</button>
 </div>
 
-<!-- =====================================================
-     🖼️ ESIKATSELUALUE / CANVAS
-     ----------------------------------------------------- -->
 <div class="preview" id="preview">
-  <canvas id="c" width="1200" height="1200" aria-label="Esikatselu"></canvas>
+  <canvas id="c" width="1200" height="1200"></canvas>
 
-  <!-- 📌 UUSI: ohjeteksti ennen kuin kuva avataan -->
-  <div class="preview-hint">✨Avaa kuva ja sovita se ruutuun! </div>
+  <div class="preview-hint">✨Avaa kuva ja sovita se ruutuun!</div>
 </div>
 
+<div class="note">✨Lisää koristeita ja muokkaa niitä kahdella sormella!</div>
 
-<!-- =====================================================
-     📋 OHJE / NOTE
-     ----------------------------------------------------- -->
-<div class="note">
- ✨Lisää koristeita ja muokkaa niitä kahdella sormella!
-</div>
-
-<!-- =====================================================
+     <!-- =====================================================
      💻 JAVASCRIPT: TOIMINNALLISUUS
      ----------------------------------------------------- -->
 <script>
@@ -328,6 +302,10 @@ const clearBtn = document.getElementById('clear');
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
 const preview = document.getElementById('preview');
+
+/* 🔥 PUUTTUVA RIVI (TÄMÄ KORJAA OHJETEKSTIN KATOAMISEN) */
+const previewHint = document.querySelector('.preview-hint');
+
 clearCanvas(ctx);
 
 /* 📌 Esikatseluun koskemalla avataan kuva, jos taustaa ei ole vielä asetettu */
@@ -336,7 +314,6 @@ preview.addEventListener('click', () => {
     file.click();  // sama kuin “Avaa kuva”
   }
 });
-
 
   /* -------------------- Taustapuskuri (back buffer) -------------------- */
   const back = document.createElement('canvas');
@@ -387,7 +364,7 @@ preview.addEventListener('click', () => {
   /* -------------------- Piirron apufunktiot -------------------- */
   function clearCanvas(target){
     const t = target||ctx;
-    t.fillStyle = '#121212';          // tummempi tausta myös resetissä
+    t.fillStyle = '#121212';
     t.fillRect(0,0,canvas.width,canvas.height);
   }
 
@@ -410,7 +387,10 @@ preview.addEventListener('click', () => {
     hardResetPointers();
     needsRedraw=true;
     delBtn.style.display='none';
-    updateScrollMode(); // kun taustakuva poistuu, sallitaan skrollaus jälleen
+    updateScrollMode();
+
+    /* Palauta ohjeteksti näkyviin */
+    if (previewHint) previewHint.style.display = "block";
   }
 
   /* -------------------- KUVAN DEKoodaus ja skaalaus -------------------- */
@@ -461,7 +441,7 @@ preview.addEventListener('click', () => {
 
   /* -------------------- Varsinainen renderöinti -------------------- */
   function renderTo(targetCtx){
-    targetCtx.fillStyle='#121212';           // tummempi tausta myös tallennuksessa
+    targetCtx.fillStyle='#121212';
     targetCtx.fillRect(0,0,canvas.width,canvas.height);
 
     if(bgBitmap){
@@ -503,7 +483,7 @@ preview.addEventListener('click', () => {
     g.quadraticCurveTo(x, y, x+rr, y);
     g.closePath();
   }
-
+  /* -------------------- Korostuskehys aktiivi-koristeelle -------------------- */
   function drawOutlineForActive(){
     if(activeIndex<0 || !stickers[activeIndex]) return;
     const st = stickers[activeIndex];
@@ -528,7 +508,7 @@ preview.addEventListener('click', () => {
     updateDeleteButtonPosition();
   }
 
-  /* -------------------- Yhdistelmäpiirto (back → näkyvä) -------------------- */
+  /* -------------------- Näytä back buffer → canvas -------------------- */
   function draw(){
     renderTo(bctx);
     ctx.drawImage(back,0,0);
@@ -547,16 +527,19 @@ preview.addEventListener('click', () => {
     const rect = canvas.getBoundingClientRect();
     const scaleX = rect.width / canvas.width;
     const scaleY = rect.height / canvas.height;
+
     const img = st.bitmap, w=img.width, h=img.height;
     const innerScale = Math.min(BASE_STICKER/w, BASE_STICKER/h) * st.scale;
+
     const px = (st.x + (w/2)*innerScale) * scaleX + rect.left;
     const py = (st.y - (h/2)*innerScale) * scaleY + rect.top;
+
     const pr = preview.getBoundingClientRect();
     delBtn.style.left = (px - pr.left + 6) + 'px';
     delBtn.style.top  = (py - pr.top  - 6) + 'px';
   }
 
-  /* -------------------- Tiedoston avaus + LATAAN… -------------------- */
+  /* -------------------- Tiedoston avaus -------------------- */
   file.addEventListener('change', async (e)=>{
     const f = e.target.files && e.target.files[0];
     if(!f) return;
@@ -594,14 +577,13 @@ preview.addEventListener('click', () => {
       }
 
      fitContain();
-clampBgScale();
-needsRedraw = true;
+     clampBgScale();
+     needsRedraw = true;
 
-/* 📌 UUSI: Kun kuva on ladattu, ohjeteksti piilotetaan */
-if (previewHint) previewHint.style.display = "none";
+     /* 📌 Ohjeteksti pois */
+     if (previewHint) previewHint.style.display = "none";
 
-/* Kun taustakuva on asetettu, estetään skrollaus esikatselualueella */
-updateScrollMode();
+     updateScrollMode();
 
 } catch {
   alert('Kuvan avaaminen epäonnistui.');
@@ -638,7 +620,7 @@ finally {
     },'image/png',0.95);
   });
 
-  /* -------------------- Tyhjennys / Reset -------------------- */
+  /* -------------------- Reset -------------------- */
   clearBtn.addEventListener('click', resetAll);
 
   /* -------------------- Pikkukuvat → Koristeiksi -------------------- */
@@ -674,7 +656,8 @@ finally {
     });
   });
 
-  /* -------------------- Eleet: drag/zoom/rotaatio -------------------- */
+  /* -------------------- Eleet (drag/zoom/rotaatio) -------------------- */
+  
   function canvasCoords(e){
     const r=canvas.getBoundingClientRect();
     return {
@@ -800,107 +783,11 @@ function updateScrollMode() {
   const preview = document.querySelector('.preview');
   if (!preview) return;
 
-  // jos bgBitmap on null/undefined → sallitaan skrollaus
   if (!bgBitmap) {
     preview.classList.add("scroll-mode");
   } else {
     preview.classList.remove("scroll-mode");
   }
 }
-
-// ajetaan kerran sivun latauksessa (alussa ei taustakuvaa)
 updateScrollMode();
 </script>
-
-  <!-- =====================================================
-       📦 KIRJASTO (PIKKUKUVAT)
-       ----------------------------------------------------- -->
-<div id="thumbs" class="thumbs">
-
-<!-- 🎄 Otsikko 1 -->
-<div class="thumb-title">Tekstit</div>
-
-<div class="thumb"><img src="https://i.postimg.cc/NMC5RjM8/jouluteksti.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/k4cR5PL4/621005e7-5c3c-4c82-b4cd-7a51d7eb2346.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/SxPGkWcB/tekstinauha.png" alt="Koriste tekstinauha"></div>
-<div class="thumb"><img src="https://i.postimg.cc/76bJb2V2/Teksti.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/wBzGvQYt/Chat-GPT-Image-14-marrask-2025-klo-12-06-17.png" alt="#pikkujoulut2025" /></div>
-
-<!-- 🎄 Otsikko -->
-<div class="thumb-title">Tonttulakit</div>
-
-<div class="thumb"><img src="https://i.postimg.cc/hvgn2hW0/510307522834342588a48e1f61e365b6.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/RZ9N8V9q/e15aff05b343953069b448175042c3bd.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/kGYvHCgz/Whats-App-Image-2025-11-13-at-07-04-02-3.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/sDv80JrB/hat-1.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/KYK1sw86/rusetti.png" alt="Rusetti" /></div>
-
-<!-- 🎄 Otsikko 3 -->
-<div class="thumb-title">Päähärpäkkeet</div>
-
-<div class="thumb"><img src="https://i.postimg.cc/rmvCSkfy/karkkisarvet.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/htYPt5X4/Whats-App-Image-2025-11-13-at-07-04-03-15.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/CxxHXVjR/Chat-GPT-Image-12-marrask-2025-klo-18-47-55.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/bJgf0Njn/lasit.png" alt="Lasit" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/pV4ws1Gh/Sarvetkoristeilla.png" alt="Koriste sarvet"></div>
-
-<!-- 🎄 Otsikko -->
-<div class="thumb-title">Herkut</div>
-
-<div class="thumb"><img src="https://i.postimg.cc/FFWpN81s/7a5826d6278c6a08de65a8a8a046c55c.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/cCnmL7Dq/55d7214cfcfbbf1215d070571faa6dd1.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/fbZ4stY4/muki-(1).png" alt="Koriste muki"></div>
-<div class="thumb"><img src="https://i.postimg.cc/1XSsYCMs/lasi-(1).png" alt="Koriste lasi"></div>
-<div class="thumb"><img src="https://i.postimg.cc/28CYNqqH/8e7b741404c6a555f7b38e12c6586d58.png" alt="Koriste" /></div>
-
-<!-- 🎄 Otsikko -->
-<div class="thumb-title">Pikku kaverit</div>
-
-<div class="thumb"><img src="https://i.postimg.cc/0QL9GHRr/Poro-(1).png" alt="Koriste poro"></div>
-<div class="thumb"><img src="https://i.postimg.cc/cLYVbw0y/8425ac82bb01df176c5ce62967e8eeeb.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/5tPdB1fx/4fb7385e575122c9976601623ce6d95e.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/bNs69fSK/tonttu.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/RZCt3G7P/tonttu-(1).png" alt="Koriste tonttu"></div>
-
-<!-- 🎄 Otsikko -->
-<div class="thumb-title">Naughty or Nice</div>
-
-<div class="thumb"><img src="https://i.postimg.cc/m28YZC7Y/naughtyleima.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/jj8rq8ZP/naughtyornice.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/FRcGCzdf/hohoho.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/NfT3WGXC/lappunen.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/J4KXC2gV/Kiss-Me.png" alt="Koriste" /></div>
-
-<!-- 🎄 Otsikko -->
-<div class="thumb-title">Koristeet </div>
-
-<div class="thumb"><img src="https://i.postimg.cc/B67hLdFp/kuusi-(1).png" alt="Koriste kuusi"></div>
-<div class="thumb"><img src="https://i.postimg.cc/x1sDfJFP/lehva.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/tRSfYmGn/rusetti1-(1).png" alt="Koriste rusetti"></div>
-<div class="thumb"><img src="https://i.postimg.cc/QMW61Lj9/test-transparent.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/nLBBmwHG/ce2f1ccf372f3d66c788dbac18029180.png" alt="Koriste" /></div>
-
-<!-- 🎄 Otsikko 2 -->
-<div class="thumb-title">Kehykset</div>
-
-<div class="thumb"><img src="https://i.postimg.cc/cCqzmzYy/153d3702402e3c4ceec9f7edd176fcb9.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/jS0LYc5w/havukehys-(1).png" alt="Koriste havukehys"></div>
-<div class="thumb"><img src="https://i.postimg.cc/DZZLt0NK/kehys-(1).png" alt="Koriste kehys"></div>
-<div class="thumb"><img src="https://i.postimg.cc/4y1Cf2nD/candykehys.png" alt="Koriste" /></div>
-<div class="thumb"><img src="https://i.postimg.cc/BbmyJjSV/lahjat-(2).png" alt="Koriste lahjat"></div>
-
-</div> <!-- /#thumbs -->
-
-<!-- =====================================================
-     📘 OHJE (PIKKUKUVAN LISÄYS)
-===================================================== -->
-<footer class="credits">
-  🎄 Tonttuilun iloa ja joulumieltä! ✨
-  <div class="credits-name">– Kiia</div>
-</footer>
-
-</div> <!-- /.wrap -->
-
-</body>
-</html>
-
