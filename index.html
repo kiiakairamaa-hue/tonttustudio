@@ -164,21 +164,6 @@ input[type=file]{display:none}
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* 📌 UUSI: ohjeteksti esikatselun keskelle */
-.preview-hint {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #f6d778;
-  font-size: 18px;
-  font-family: 'Fredoka', sans-serif;
-  opacity: 0.75;
-  pointer-events: none;
-  text-align: center;
-  padding: 4px 8px;
-}
-
 /* -------------------- Pieni ohjeteksti -------------------- */
 .note{
   text-align:left;
@@ -292,9 +277,6 @@ input[type=file]{display:none}
      ----------------------------------------------------- -->
 <div class="preview" id="preview">
   <canvas id="c" width="1200" height="1200" aria-label="Esikatselu"></canvas>
-
-  <!-- 📌 UUSI: ohjeteksti ennen kuin kuva avataan -->
-  <div class="preview-hint">Napauta lisätäksesi kuvan</div>
 </div>
 
 
@@ -328,16 +310,7 @@ input[type=file]{display:none}
   const canvas = document.getElementById('c');
   const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
   const preview = document.getElementById('preview');
-  const previewHint = document.querySelector('.preview-hint');  /* 🔹 LISÄTTY */
   clearCanvas(ctx);
-
-  /* 📌 Esikatseluun koskemalla avataan kuva, jos taustaa ei ole vielä asetettu */
-  preview.addEventListener('click', () => {
-    if (!bgBitmap) {
-      file.click();  // sama kuin “Avaa kuva”
-    }
-  });
-
 
   /* -------------------- Taustapuskuri (back buffer) -------------------- */
   const back = document.createElement('canvas');
@@ -597,9 +570,6 @@ input[type=file]{display:none}
       fitContain();
       clampBgScale();
       needsRedraw = true;
-
-      /* 📌 Kun kuva on ladattu, ohjeteksti piilotetaan */
-      if (previewHint) previewHint.style.display = "none";
 
       /* Kun taustakuva on asetettu, estetään skrollaus esikatselualueella */
       updateScrollMode();
