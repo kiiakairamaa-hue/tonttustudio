@@ -74,17 +74,14 @@ body{
   position: relative;   /* ← tämä sallii stickyn toimia sisällä */
 }
 
-/* -------------------- Sticky-otsikko (fixattu) -------------------- */
+/* -------------------- Sticky-otsikko (korjattu) -------------------- */
 h1 {
   position: sticky;
   top: 0;
   z-index: 200;
 
   margin: 0;
-  margin-bottom: -2px;
-
-  /* yläreuna pienempi, ala suurempi → ei hyppyä */
-  padding: 6px 0 12px;
+  padding: 10px 0 10px;  /* tasainen → ei hyppyä */
 
   background: var(--red);
 
@@ -96,8 +93,9 @@ h1 {
   font-size: 42px;
   line-height: 1.05;
   color: #ffd700;
-  text-shadow: 0 2px 0 rgba(0,0,0,.25), 
-               0 0 16px rgba(243,209,119,.35);
+  text-shadow: 
+    0 2px 0 rgba(0,0,0,.25),
+    0 0 16px rgba(243,209,119,.35);
   font-weight: 700;
   font-family: 'Emilys Candy', cursive;
   letter-spacing: .3px;
@@ -108,7 +106,7 @@ h1 {
   height: 60px;
   display: block;
   align-self: flex-end;
-  margin-bottom: -1px;
+  margin-bottom: -2px;
   margin-right: 2px;
 }
 
@@ -905,6 +903,7 @@ updateScrollMode();
 
 </body>
 </html>
+
 
 
 
