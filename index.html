@@ -156,7 +156,7 @@ input[type=file]{display:none}
   overflow: hidden;
 
   position: sticky;
-  top: 78px;   /* ⬅️ korjattu arvo */
+  top: 78px;
   z-index: 50;
 
   touch-action: none;
@@ -166,13 +166,20 @@ input[type=file]{display:none}
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-canvas{
-  width: 100%;
-  height: 100%;
-  display: block;
-  background: #121212;
+/* 📌 UUSI: ohjeteksti esikatselun keskelle */
+.preview-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #f6d778;
+  font-size: 18px;
+  font-family: 'Fredoka', sans-serif;
+  opacity: 0.75;
+  pointer-events: none;
+  text-align: center;
+  padding: 4px 8px;
 }
-
 
 /* -------------------- Pieni ohjeteksti -------------------- */
 .note{
@@ -287,7 +294,11 @@ canvas{
      ----------------------------------------------------- -->
 <div class="preview" id="preview">
   <canvas id="c" width="1200" height="1200" aria-label="Esikatselu"></canvas>
+
+  <!-- 📌 UUSI: ohjeteksti ennen kuin kuva avataan -->
+  <div class="preview-hint">Napauta lisätäksesi kuvan</div>
 </div>
+
 
 <!-- =====================================================
      📋 OHJE / NOTE
@@ -584,23 +595,26 @@ preview.addEventListener('click', () => {
         if(bmp && bmp.close) try{ bmp.close(); }catch(_){}
       }
 
-      fitContain();
-      clampBgScale();
-      needsRedraw=true;
+     fitContain();
+clampBgScale();
+needsRedraw = true;
 
-      // kun taustakuva on asetettu, estetään skrollaus esikatselualueella
-      updateScrollMode();
+/* 📌 UUSI: Kun kuva on ladattu, ohjeteksti piilotetaan */
+if (previewHint) previewHint.style.display = "none";
 
-    }catch{
-      alert('Kuvan avaaminen epäonnistui.');
-    }
-    finally{
-      e.target.value='';
-      label.textContent=originalText;
-      label.style.opacity='1';
-      label.style.pointerEvents='auto';
-    }
-  });
+/* Kun taustakuva on asetettu, estetään skrollaus esikatselualueella */
+updateScrollMode();
+
+} catch {
+  alert('Kuvan avaaminen epäonnistui.');
+}
+finally {
+  e.target.value = '';
+  label.textContent = originalText;
+  label.style.opacity = '1';
+  label.style.pointerEvents = 'auto';
+}
+});
 
   /* -------------------- Tallennus PNG:ksi -------------------- */
   function pad3(n){ return String(n).padStart(3,'0'); }
@@ -891,6 +905,7 @@ updateScrollMode();
 
 </body>
 </html>
+
 
 
 
