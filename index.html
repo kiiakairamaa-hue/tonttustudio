@@ -312,14 +312,22 @@ canvas{
   const STICKER_MIN = 0.4, STICKER_MAX = 10.0;
   const BASE_STICKER = 300;
 
-  /* -------------------- DOM-viittaukset -------------------- */
-  const file = document.getElementById('file');
-  const save = document.getElementById('save');
-  const clearBtn = document.getElementById('clear');
-  const canvas = document.getElementById('c');
-  const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
-  const preview = document.getElementById('preview');
-  clearCanvas(ctx);
+ /* -------------------- DOM-viittaukset -------------------- */
+const file = document.getElementById('file');
+const save = document.getElementById('save');
+const clearBtn = document.getElementById('clear');
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
+const preview = document.getElementById('preview');
+clearCanvas(ctx);
+
+/* 📌 Esikatseluun koskemalla avataan kuva, jos taustaa ei ole vielä asetettu */
+preview.addEventListener('click', () => {
+  if (!bgBitmap) {
+    file.click();  // sama kuin “Avaa kuva”
+  }
+});
+
 
   /* -------------------- Taustapuskuri (back buffer) -------------------- */
   const back = document.createElement('canvas');
@@ -883,6 +891,7 @@ updateScrollMode();
 
 </body>
 </html>
+
 
 
 
