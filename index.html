@@ -113,7 +113,11 @@ h1 {
 }
 
 /* -------------------- Työkalupalkki ja napit -------------------- */
-.toolbar{
+..toolbar{
+  position: sticky;
+  top: 65px;               /* pysyy otsikon alapuolella */
+  z-index: 300;            /* pysyy kaiken muun päällä */
+
   display:flex;
   gap:10px;
   justify-content:center;
@@ -123,7 +127,6 @@ h1 {
   overflow-x:auto;
   padding:2px;
 }
-
 button,
 label.button{
   white-space:nowrap;
